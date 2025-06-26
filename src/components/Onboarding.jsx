@@ -34,9 +34,9 @@ export default function Onboarding() {
       goals: formData.goals,
     };
 
-    console.log("Submiting onboarding", mappedFormData, "User ID", user.id);
+    console.log("Submitting onboarding", mappedFormData, "User ID", user.id);
     const { error } = await supabase.from("users").upsert([mappedFormData]);
-    console.log("Submiting onboarding", mappedFormData, "User ID", user.id);
+    console.log("Submitting onboarding", mappedFormData, "User ID", user.id);
 
     if (error) {
       console.error("Insert error:", error.message);

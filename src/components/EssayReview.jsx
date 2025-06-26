@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../utils/supabase/client";
 
 export default function EssayReview() {
   const [essay, setEssay] = useState("");
