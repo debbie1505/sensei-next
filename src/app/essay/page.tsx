@@ -2,6 +2,6 @@
 
 import EssayReview from "@/components/EssayReview";
 
-export default function DashboardPage() {
+export default function EssayReviewPage() {
   return <EssayReview />;
 }
