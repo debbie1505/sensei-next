@@ -2,16 +2,34 @@
 import React, { useEffect, useState } from "react";
 // Import the Supabase client we configured
 import { supabase } from "../utils/supabase/client";
+type TimelineItem = {
+  task: string;
+  due: string;
+};
 
+type EssaySubmission = {
+  id: string;
+  created_at: string;
+  essay: string;
+  feedback: string
+}
+
+type UserData = {
+  year: string;
+  applicant_type: string;
+  college_type: string;
+  goals: string
+}
 export default function Dashboard() {
-  const [submissions, setSubmissions] = useState();
+  const [submissions, setSubmissions] = useState<EssaySubmission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
-  const [timeline, setTimeline] = useState([]);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  //tells typescript that timeline will always be an array of objects with the shape
+  const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [timelineId, setTimelineId] = useState(null);
 
-  function downloadTimeline(format) {
+  function downloadTimeline(format: "json" | "text") {
     const filename = `sensei-timeline.${format === "json" ? "json" : "txt"}`;
     let content = "";
 
