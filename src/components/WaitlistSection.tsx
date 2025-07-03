@@ -5,7 +5,9 @@ import { addToWaitlist } from "@/utils/supabase/waitlist";
 
 export default function WaitlistSection() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +28,10 @@ export default function WaitlistSection() {
 
   return (
     <section id="waitlist" className="max-w-md mx-auto mt-12">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900">Join the Waitlist</h2>
+      <a href="#waitlist" className="hover:underline text-blue-600">
+        Join Waitlist
+      </a>
+
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
         <input
           type="email"

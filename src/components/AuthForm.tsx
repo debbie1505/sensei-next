@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { supabase } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -12,7 +12,7 @@ export default function AuthForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);

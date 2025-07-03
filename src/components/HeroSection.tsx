@@ -13,6 +13,9 @@ export default function HeroSection() {
         Sensei helps you build a strategic game plan for college and stand out—
         without a private counselor.
       </p>
+      <button className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-medium hover:bg-blue-700 transition">
+        Join the Waitlist
+      </button>
     </section>
   );
 }
