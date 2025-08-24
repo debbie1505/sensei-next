@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react'
 import { createClient } from "../utils/supabase/client";
 
+
 type UserData = {
-  year: string;
+  grade: number;
   applicant_type: string;
   college_type: string;
   goals: string;
@@ -25,7 +26,7 @@ export default function GenerateTimeline() {
     const fetchUser = async () => {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from('users')
+        .from('profiles')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(1)
@@ -47,54 +48,33 @@ export default function GenerateTimeline() {
     setError(null)
 
     const profileSummary = `
-      Year: ${userData.year}
+      Grade: ${userData.grade}
       Applicant Type: ${userData.applicant_type}
       Target Colleges: ${userData.college_type}
       Goals: ${userData.goals}
     `
    console.log(profileSummary)
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('/api/timeline/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a college counselor helping students create personalized application timelines.',
-            },
-            {
-              role: 'user',
-              content: `Based on this profile:\n${profileSummary}\n
-              Return a JSON array of 6-10 steps like:
-              [{"due": "August 15, 2025", "task": "Finalize college essay draft"}, …].
-              Only return the JSON. No explanation.`,
-            },
-          ],
-          temperature: 0.7,
+          profile: profileSummary,
         }),
       })
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content?.trim()
-
-      let timelineData = []
-      try {
-        timelineData = JSON.parse(content)
-      } catch (err) {
-        console.error("Failed to parse JSON:", err)
-        setError("Timeline generation failed. Try again.")
-        setLoading(false)
-        return
+      if (!response.ok) {
+        throw new Error('Failed to generate timeline');
       }
+
+      const data = await response.json()
+      const timelineData = data.timeline || []
 
       // Save to Supabase
       const supabase = createClient();
-      await supabase.from('timelines').insert([
+      await supabase.from('plans').insert([
         { profile: profileSummary, timeline: timelineData },
       ])
 

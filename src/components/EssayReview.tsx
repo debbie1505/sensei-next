@@ -54,7 +54,7 @@ export default function EssayReview() {
     if (!feedback) return;
     
     try {
-      const supabase = createClient;
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) return;

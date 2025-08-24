@@ -91,6 +91,13 @@ CREATE TABLE user_saves (
   UNIQUE(user_id, kb_item_id)
 );
 
+-- Waitlist table
+CREATE TABLE waitlist (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text UNIQUE NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
 -- Enable Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE essays ENABLE ROW LEVEL SECURITY;
@@ -98,6 +105,7 @@ ALTER TABLE plans ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE kb_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_saves ENABLE ROW LEVEL SECURITY;
+ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
 
 -- Profiles policies
 CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = user_id);
@@ -143,6 +151,10 @@ CREATE POLICY "Users can view own saves" ON user_saves FOR SELECT USING (auth.ui
 CREATE POLICY "Users can insert own saves" ON user_saves FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update own saves" ON user_saves FOR UPDATE USING (auth.uid() = user_id);
 CREATE POLICY "Users can delete own saves" ON user_saves FOR DELETE USING (auth.uid() = user_id);
+
+-- Waitlist policies (public insert, admin read)
+CREATE POLICY "Anyone can join waitlist" ON waitlist FOR INSERT WITH CHECK (true);
+-- Note: Read policies would be added for admin users
 
 -- Indexes for performance
 CREATE INDEX idx_essays_user_id ON essays(user_id);

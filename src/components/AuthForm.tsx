@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { env } from "@/env/client";
 
 export default function AuthForm() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ export default function AuthForm() {
     setError("");
     setLoading(true);
 
-    const supabase = createClient;
+    const supabase = createClient();
     let response;
     if (isLogin) {
       response = await supabase.auth.signInWithPassword({ email, password });
@@ -37,14 +38,14 @@ export default function AuthForm() {
   };
 
   const handlePasswordReset = async () => {
-    console.log("Redirecting to:", `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`)
+    console.log("Redirecting to:", `${env.NEXT_PUBLIC_SITE_URL}/update-password`)
     if (!email) {
       toast.error("Enter your email first.");
       return;
     }
-    const supabase = createClient;
+    const supabase = createClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`, // Change to your frontend URL
+      redirectTo: `${env.NEXT_PUBLIC_SITE_URL}/update-password`, // Change to your frontend URL
     });
 
     if (error) {

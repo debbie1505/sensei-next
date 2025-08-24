@@ -9,8 +9,10 @@ import {
   type Profile
 } from './schemas';
 
+import { env } from "@/env/server";
+
 const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY! 
+  apiKey: env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY || process.env.OPENAI_API_KEY!
 });
 
 // Essay Review System Prompt

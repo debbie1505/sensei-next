@@ -13,7 +13,7 @@ export default function Navbar() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient;
+    const supabase = createClient();
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
@@ -29,7 +29,7 @@ export default function Navbar() {
   }, []);
 
   const handleSignOut = async () => {
-    const supabase = createClient;
+    const supabase = createClient();
     await supabase.auth.signOut();
   };
 

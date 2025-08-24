@@ -15,8 +15,12 @@ import {
 } from "lucide-react";
 
 type TimelineItem = {
-  task: string;
-  due: string;
+  id: string;
+  title: string;
+  due_date: string;
+  status: string;
+  priority: string;
+  category: string;
 };
 
 type EssaySubmission = {
@@ -27,7 +31,7 @@ type EssaySubmission = {
 }
 
 type UserData = {
-  year: string;
+  grade: number;
   applicant_type: string;
   college_type: string;
   goals: string
@@ -49,7 +53,7 @@ export default function Dashboard() {
       content = JSON.stringify(timeline, null, 2);
     } else {
       content = timeline
-        .map((item, i) => `${i + 1}. ${item.task} (Due: ${item.due})`)
+        .map((item, i) => `${i + 1}. ${item.title} (Due: ${item.due_date})`)
         .join("\n\n");
     }
 
@@ -67,17 +71,20 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchTimeline = async () => {
-      const supabase = createClient;
+      const supabase = createClient();
       const { data, error } = await supabase
-        .from("timelines")
-        .select("*")
+        .from("plans")
+        .select(`
+          *,
+          tasks (*)
+        `)
         .order("created_at", { ascending: false })
         .limit(1);
 
       if (error) {
         console.error("Failed to load timeline:", error);
       } else if (data && data.length > 0) {
-        setTimeline(data[0].timeline);
+        setTimeline(data[0].tasks || []);
         setTimelineId(data[0].id);
       }
     };
@@ -88,9 +95,9 @@ export default function Dashboard() {
   // Fetch latest user onboarding data
   useEffect(() => {
     const fetchUserData = async () => {
-      const supabase = createClient;
+      const supabase = createClient();
       const { data, error } = await supabase
-        .from("users")
+        .from("profiles")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(1);
@@ -112,9 +119,9 @@ export default function Dashboard() {
   //  Fetch essay submissions
   useEffect(() => {
     const fetchSubmissions = async () => {
-      const supabase = createClient;
+      const supabase = createClient();
       const { data, error } = await supabase
-        .from("essay_submissions")
+        .from("essays")
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -201,8 +208,8 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Year:</span>
-                    <span className="font-medium">{userData.year}</span>
+                    <span className="text-gray-600">Grade:</span>
+                    <span className="font-medium">{userData.grade}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Applicant Type:</span>
@@ -326,20 +333,20 @@ export default function Dashboard() {
                         <div className="space-y-2">
                           <input
                             type="text"
-                            value={item.due}
+                            value={item.due_date}
                             onChange={(e) => {
                               const newTimeline = [...timeline];
-                              newTimeline[idx].due = e.target.value;
+                              newTimeline[idx].due_date = e.target.value;
                               setTimeline(newTimeline);
                             }}
                             className="border border-gray-300 p-2 rounded w-full text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           />
                           <input
                             type="text"
-                            value={item.task}
+                            value={item.title}
                             onChange={(e) => {
                               const newTimeline = [...timeline];
-                              newTimeline[idx].task = e.target.value;
+                              newTimeline[idx].title = e.target.value;
                               setTimeline(newTimeline);
                             }}
                             className="border border-gray-300 p-2 rounded w-full text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500"
@@ -347,8 +354,8 @@ export default function Dashboard() {
                         </div>
                       ) : (
                         <>
-                          <p className="text-sm text-gray-600 font-medium">Due: {item.due}</p>
-                          <p className="text-gray-800">{item.task}</p>
+                          <p className="text-sm text-gray-600 font-medium">Due: {item.due_date}</p>
+                          <p className="text-gray-800">{item.title}</p>
                         </>
                       )}
                     </div>
@@ -380,11 +387,10 @@ export default function Dashboard() {
                                 return;
                               }
 
-                                                      const supabase = createClient;
-                        const { error } = await supabase
-                          .from("timelines")
-                          .update({ timeline })
-                          .eq("id", timelineId);
+                                                                                    const supabase = createClient();
+                              const { error } = await supabase
+                          .from("tasks")
+                          .upsert(timeline.map(task => ({ ...task, plan_id: timelineId })));
 
                               if (error) console.error("Save failed:", error);
                               else setIsEditing(false);

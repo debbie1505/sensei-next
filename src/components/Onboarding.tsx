@@ -27,16 +27,15 @@ export default function Onboarding() {
     }
 
     const mappedFormData = {
-      id: user.id,
-      year: formData.year,
+      user_id: user.id,
+      grade: parseInt(formData.year),
       applicant_type: formData.applicantType,
-      test_scores: formData.testScores,
       college_type: formData.collegeType,
       goals: formData.goals,
     };
 
     console.log("Submitting onboarding", mappedFormData, "User ID", user.id);
-    const { error } = await supabase.from("users").upsert([mappedFormData]);
+    const { error } = await supabase.from("profiles").upsert([mappedFormData]);
     console.log("Submitting onboarding", mappedFormData, "User ID", user.id);
 
     if (error) {
