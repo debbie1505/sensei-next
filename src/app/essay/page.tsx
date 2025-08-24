@@ -1,7 +1,12 @@
 "use client";
 
 import EssayReview from "@/components/EssayReview";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function EssayReviewPage() {
-  return <EssayReview />;
+  return (
+    <ProtectedRoute>
+      <EssayReview />
+    </ProtectedRoute>
+  );
 }

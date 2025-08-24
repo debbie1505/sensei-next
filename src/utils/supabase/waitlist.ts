@@ -1,9 +1,10 @@
 // lib/waitlist.ts
 "use server";
 
-import { supabase } from "./client";
+import { createClient } from "./server";
 
 export async function addToWaitlist(email: string): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient();
   const { error } = await supabase.from("waitlist").insert([{ email }]);
 
   if (error) {

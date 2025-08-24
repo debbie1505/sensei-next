@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import { supabase } from "../utils/supabase/client";
+import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
@@ -15,6 +15,7 @@ export default function UpdatePassword() {
 
     setLoading(true)
 
+    const supabase = createClient();
     const { error } = await supabase.auth.updateUser({
       password: newPassword,
     });
@@ -24,7 +25,7 @@ export default function UpdatePassword() {
       toast.error("Password update failed: " + error.message);
     } else {
       toast.success("Password updated successfully! Redirected to login");
-      await supabase.auth.signout(); // log them out
+      await supabase.auth.signOut(); // log them out
       setTimeout(() =>router.push("/login"), 2000); //where we want to redirect 
       //2s delay for use to see message
     }

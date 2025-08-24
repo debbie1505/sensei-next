@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { supabase } from "../utils/supabase/client";
+import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function Onboarding() {
@@ -15,6 +15,7 @@ export default function Onboarding() {
   });
   // This goes at the top of the component (inside the component body)
   const submitOnboarding = async () => {
+    const supabase = createClient();
     const {
       data: { user },
       error: userError,
@@ -49,7 +50,7 @@ export default function Onboarding() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,

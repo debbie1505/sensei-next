@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { supabase } from "../utils/supabase/client";
+import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -17,6 +17,7 @@ export default function AuthForm() {
     setError("");
     setLoading(true);
 
+    const supabase = createClient;
     let response;
     if (isLogin) {
       response = await supabase.auth.signInWithPassword({ email, password });
@@ -41,6 +42,7 @@ export default function AuthForm() {
       toast.error("Enter your email first.");
       return;
     }
+    const supabase = createClient;
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`, // Change to your frontend URL
     });

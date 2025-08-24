@@ -1,16 +1,29 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-import { supabase } from "../utils/supabase/client";
+import { createClient } from "../utils/supabase/client";
+
+type UserData = {
+  year: string;
+  applicant_type: string;
+  college_type: string;
+  goals: string;
+};
+
+type TimelineItem = {
+  due: string;
+  task: string;
+};
 
 export default function GenerateTimeline() {
-  const [userData, setUserData] = useState(null)
-  const [timeline, setTimeline] = useState([])
+  const [userData, setUserData] = useState<UserData | null>(null)
+  const [timeline, setTimeline] = useState<TimelineItem[]>([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   // Fetch user profile
   useEffect(() => {
     const fetchUser = async () => {
+      const supabase = createClient();
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -25,6 +38,11 @@ export default function GenerateTimeline() {
   }, [])
 
   const handleGenerate = async () => {
+    if (!userData) {
+      setError("User data not available. Please try again.");
+      return;
+    }
+    
     setLoading(true)
     setError(null)
 
@@ -75,6 +93,7 @@ export default function GenerateTimeline() {
       }
 
       // Save to Supabase
+      const supabase = createClient();
       await supabase.from('timelines').insert([
         { profile: profileSummary, timeline: timelineData },
       ])

@@ -1,12 +1,12 @@
 "use client";
 
-import Timeline from "@/components/Timeline";
+import Scholarships from "@/components/Scholarships";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function TimelinePage() {
+export default function ScholarshipsPage() {
   return (
     <ProtectedRoute>
-      <Timeline />
+      <Scholarships />
     </ProtectedRoute>
   );
 }

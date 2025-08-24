@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 const testimonials = [
   {
@@ -30,9 +31,9 @@ export default function TestimonialsSection() {
       <section className="bg-white py-8 px-6 text-center">
         <p className="text-gray-500 text-sm mb-2">Trusted by students from</p>
         <div className="flex justify-center gap-4 grayscale opacity-60">
-          <img src="/logos/school1.svg" alt="School 1" className="h-8" />
-          <img src="/logos/school2.svg" alt="School 2" className="h-8" />
-          <img src="/logos/school3.svg" alt="School 3" className="h-8" />
+          <Image src="/logos/school1.svg" alt="School 1" width={32} height={32} className="h-8" />
+          <Image src="/logos/school2.svg" alt="School 2" width={32} height={32} className="h-8" />
+          <Image src="/logos/school3.svg" alt="School 3" width={32} height={32} className="h-8" />
         </div>
       </section>
     </>
