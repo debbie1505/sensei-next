@@ -1,58 +1,105 @@
 "use client";
 import React, { useState } from "react";
-import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { createClient } from "@/utils/supabase/client";
 import { env } from "@/env/client";
 
 export default function AuthForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(false); // Toggle between login/signup
+  const [isLogin, setIsLogin] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
+  
     const supabase = createClient();
-    let response;
-    if (isLogin) {
-      response = await supabase.auth.signInWithPassword({ email, password });
-    } else {
-      response = await supabase.auth.signUp({ email, password });
-    }
-
-    if (response.error) {
-      console.error("Auth error: ", response.error);
-      setError(response.error.message);
-    } else {
-      toast.success(isLogin ? "Logged in!" : "Sign-up sucessful");
-      console.log("Auth success:", response);
-      // 🧠 Here's the key: redirect based on context
-      router.push(isLogin ? "/dashboard" : "/onboarding");
-    }
-  };
+    const SITE_URL =
+      env.NEXT_PUBLIC_SITE_URL ??
+      (typeof window !== "undefined" ? window.location.origin : "");
+    
+      try {
+        console.log("Attempting auth with:", { isLogin, email });
+    
+        if (isLogin) {
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          console.log("signInWithPassword response:", data);
+                  if (error) {
+          console.error("signIn error (raw):", error);
+          setError(error.message);
+          setLoading(false);
+          return;
+        }
+          toast.success("Logged in!");
+          router.push("/dashboard");
+          return;
+        }
+    
+        // SIGN UP
+        const resp = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${SITE_URL}/auth/callback` },
+        });
+    
+        console.log("signUp response:", JSON.stringify(resp, null, 2));
+    
+        if (resp.error) {
+          // Show *actual* fields from Supabase Auth error: name/message/status
+          console.error("signUp error (raw):", resp.error);
+          setError(resp.error.message || "Sign-up failed");
+          setLoading(false);
+          return;
+        }
+    
+        // Email confirmations ON (recommended): user exists, session is null
+        if (resp.data.user && !resp.data.session) {
+          toast.success("Check your email to confirm your account.");
+          setLoading(false);
+          return; // session will be created on /auth/callback
+        }
+    
+        // Confirmations OFF: session present immediately
+        toast.success("Sign-up successful!");
+        router.push("/onboarding");
+      } catch (err) {
+        // Print everything so nothing gets swallowed
+        console.error("Auth throw (raw):", err);
+        try {
+          console.error("Auth throw (json):", JSON.stringify(err));
+        } catch {}
+        // Some runtime errors don’t have code/message; fall back to String(err)
+        const message =
+          (err as any)?.message ||
+          (err as any)?.error?.message ||
+          String(err) ||
+          "Authentication failed";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
 
   const handlePasswordReset = async () => {
-    console.log("Redirecting to:", `${env.NEXT_PUBLIC_SITE_URL}/update-password`)
     if (!email) {
       toast.error("Enter your email first.");
       return;
     }
     const supabase = createClient();
+    const SITE_URL =
+      env.NEXT_PUBLIC_SITE_URL ??
+      (typeof window !== "undefined" ? window.location.origin : "");
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${env.NEXT_PUBLIC_SITE_URL}/update-password`, // Change to your frontend URL
+      redirectTo: `${SITE_URL}/update-password`,
     });
-
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Password reset email sent.");
-    }
+    if (error) toast.error(error.message);
+    else toast.success("Password reset email sent.");
   };
 
   return (
@@ -69,6 +116,7 @@ export default function AuthForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
           />
           <input
             type="password"
@@ -77,6 +125,8 @@ export default function AuthForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete={isLogin ? "current-password" : "new-password"}
+            minLength={6}
           />
           <button
             type="submit"
@@ -86,41 +136,31 @@ export default function AuthForm() {
             {loading ? "Please wait..." : isLogin ? "Log In" : "Sign Up"}
           </button>
         </form>
+
         <div className="mt-4 text-center space-y-2">
-          <button
-            type="button"
-            onClick={handlePasswordReset}
-            className="text-sm text-blue-500 hover:underline"
-          >
+          <button type="button" onClick={handlePasswordReset} className="text-sm text-blue-500 hover:underline">
             Forgot Password?
           </button>
           <div className="text-sm text-gray-600">
             {isLogin ? (
               <>
                 Don’t have an account?{" "}
-                <button
-                  onClick={() => setIsLogin(false)}
-                  className="text-blue-600 hover:underline"
-                >
+                <button onClick={() => setIsLogin(false)} className="text-blue-600 hover:underline">
                   Sign Up
                 </button>
               </>
             ) : (
               <>
                 Already have an account?{" "}
-                <button
-                  onClick={() => setIsLogin(true)}
-                  className="text-blue-600 hover:underline"
-                >
+                <button onClick={() => setIsLogin(true)} className="text-blue-600 hover:underline">
                   Log In
                 </button>
               </>
             )}
           </div>
         </div>
-        {error && (
-          <p className="text-red-500 text-sm mt-4">{error}</p>
-        )}
+
+        {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
       </div>
     </div>
   );

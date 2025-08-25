@@ -12,6 +12,13 @@ export default function HeroSection() {
     }
   };
 
+  const scrollToFeatures = () => {
+    const element = document.getElementById('features');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="min-h-screen flex flex-col justify-center items-center text-center px-6 py-20 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Animated background elements */}
@@ -61,7 +68,10 @@ export default function HeroSection() {
             </span>
           </button>
           
-          <button className="group bg-white/80 backdrop-blur-sm text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:bg-white transition-all duration-300 border border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md">
+          <button 
+            onClick={scrollToFeatures}
+            className="group bg-white/80 backdrop-blur-sm text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:bg-white transition-all duration-300 border border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md"
+          >
             <span className="flex items-center gap-2">
               Learn More
               <ChevronDown className="w-5 h-5 group-hover:translate-y-1 transition-transform duration-300" />

@@ -217,7 +217,7 @@ export interface Profile {
   grade: number;
   state: string;
   citizenship: string;
-  gpa: string;
+  gpa: number;
   major_interests: string[];
   applicant_type: string;
   college_type: string;

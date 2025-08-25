@@ -1,4 +1,3 @@
-"use server";
 // Server-side environment variables (server-only)
 import { z } from "zod";
 
