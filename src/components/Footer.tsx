@@ -1,85 +1,66 @@
 "use client";
 import Link from "next/link";
-import { Heart, Mail, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Heart, Mail, Sparkles } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
+    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {/* Enhanced Brand */}
           <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="text-2xl font-bold text-blue-400 mb-4 inline-block">
-              Sensei
-            </Link>
-            <p className="text-gray-400 mb-6 max-w-md">
-              The AI-powered college admissions platform that helps students navigate their journey 
-              to higher education with confidence and clarity.
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <Link href="/" className="text-3xl font-bold text-blue-400">
+                Sensei
+              </Link>
+            </div>
+            <p className="text-gray-300 mb-8 max-w-md text-lg leading-relaxed">
+              An AI mentor for college applications. Turn chaos into a step-by-step plan.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="mailto:hello@sensei.com" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <a 
+                href="mailto:hello@usesensei.app" 
+                className="text-gray-400 hover:text-blue-400 transition-all duration-300 transform hover:scale-110 bg-gray-800/50 p-3 rounded-xl hover:bg-gray-700/50"
+              >
                 <Mail className="w-5 h-5" />
               </a>
             </div>
           </div>
 
-          {/* Product */}
+          {/* Enhanced Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Product</h3>
-            <ul className="space-y-2">
+            <h3 className="text-xl font-semibold mb-6 text-white">Links</h3>
+            <ul className="space-y-4">
               <li>
-                <Link href="#features" className="text-gray-400 hover:text-white transition-colors">
+                <Link 
+                  href="#features" 
+                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
+                >
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="/essay" className="text-gray-400 hover:text-white transition-colors">
-                  Essay Review
-                </Link>
-              </li>
-              <li>
-                <Link href="/timeline" className="text-gray-400 hover:text-white transition-colors">
-                  Timeline Builder
-                </Link>
-              </li>
-              <li>
-                <Link href="/scholarships" className="text-gray-400 hover:text-white transition-colors">
-                  Scholarship Matcher
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="#waitlist" className="text-gray-400 hover:text-white transition-colors">
+                <Link 
+                  href="#waitlist" 
+                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
+                >
                   Join Waitlist
                 </Link>
               </li>
               <li>
-                <Link href="#testimonials" className="text-gray-400 hover:text-white transition-colors">
-                  Testimonials
-                </Link>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <a 
+                  href="mailto:hello@usesensei.app" 
+                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
+                >
                   Contact
                 </a>
               </li>
@@ -87,21 +68,36 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
+        {/* Enhanced Bottom */}
+        <div className="border-t border-gray-800 mt-16 pt-12 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-400 text-sm mb-4 md:mb-0">
             &copy; {new Date().getFullYear()} Sensei. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 mt-4 md:mt-0">
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
-              Privacy Policy
+          <div className="flex items-center gap-6">
+            <a 
+              href="#" 
+              className="text-gray-400 hover:text-white text-sm transition-all duration-300 hover:underline"
+            >
+              Privacy
             </a>
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
-              Terms of Service
+            <a 
+              href="#" 
+              className="text-gray-400 hover:text-white text-sm transition-all duration-300 hover:underline"
+            >
+              Terms
             </a>
-            <span className="text-gray-400 text-sm flex items-center gap-1">
-              Made with <Heart className="w-4 h-4 text-red-500" /> for students
+            <span className="text-gray-400 text-sm flex items-center gap-2">
+              Made with <Heart className="w-4 h-4 text-red-500 animate-pulse" /> for students
             </span>
+          </div>
+        </div>
+
+        {/* Enhanced Compliance */}
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="bg-gray-800/50 rounded-2xl p-6 text-center backdrop-blur-sm border border-gray-700/50">
+            <p className="text-gray-300 text-sm font-medium">
+              13+ only. Sensei is guidance, not legal/financial advice.
+            </p>
           </div>
         </div>
       </div>

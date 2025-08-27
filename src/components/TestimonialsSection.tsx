@@ -1,146 +1,111 @@
 "use client";
 import { useState } from "react";
-import { Star, Quote } from "lucide-react";
+import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 
-const testimonials = [
+const faqs = [
   {
-    quote: "Sensei gave me better feedback than my actual school counselor. The AI suggestions were incredibly specific and actionable.",
-    name: "Maya Chen",
-    role: "12th Grade Student",
-    school: "Accepted to Stanford",
-    rating: 5
+    question: "When can I use it?",
+    answer: "Rolling invites during beta."
   },
   {
-    quote: "I finally understand what colleges want to see in my essays. The rubric scoring helped me identify exactly what to improve.",
-    name: "Jayden Rodriguez",
-    role: "Transfer Applicant",
-    school: "Accepted to UCLA",
-    rating: 5
+    question: "How much will it cost?",
+    answer: "Free during beta; student pricing later."
   },
   {
-    quote: "The timeline feature kept me organized throughout the entire application process. I never missed a deadline!",
-    name: "Sarah Johnson",
-    role: "12th Grade Student",
-    school: "Accepted to Harvard",
-    rating: 5
+    question: "Does Sensei write essays?",
+    answer: "No—coaching only."
   },
   {
-    quote: "The scholarship matcher found opportunities I never would have discovered on my own. It's like having a personal research assistant.",
-    name: "Alex Thompson",
-    role: "12th Grade Student",
-    school: "Accepted to MIT",
-    rating: 5
+    question: "Data privacy?",
+    answer: "No resale; delete anytime."
+  },
+  {
+    question: "Age?",
+    answer: "13+ only."
   }
 ];
 
 export default function TestimonialsSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  const toggleFAQ = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <section id="testimonials" className="bg-gradient-to-br from-gray-50 to-blue-50 py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-            What Students Are{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Saying
-            </span>
+    <section id="testimonials" className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-100/50 dark:from-gray-900 dark:via-blue-900/30 dark:to-indigo-900/50 py-32 px-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Enhanced Header */}
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-card/80 backdrop-blur-sm border border-blue-200/50 dark:border-blue-700/50 rounded-full px-6 py-3 mb-8 text-sm font-medium text-blue-700 dark:text-blue-200 shadow-lg">
+            <HelpCircle className="w-4 h-4" />
+            Frequently Asked Questions
+          </div>
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 text-gray-900 dark:text-white tracking-tight">
+            FAQ
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Join thousands of students who have transformed their college admissions journey with Sensei.
-          </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {testimonials.map((testimonial, index) => (
+        {/* Enhanced FAQ Accordion */}
+        <div className="space-y-6">
+          {faqs.map((faq, index) => (
             <div 
               key={index}
-              className={`bg-white p-8 rounded-2xl shadow-lg border border-gray-100 transition-all duration-500 ${
-                index === activeIndex ? 'scale-105 shadow-xl' : 'scale-100'
-              }`}
+              className="group bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 dark:border-border/50 overflow-hidden hover:shadow-xl transition-all duration-300"
             >
-              {/* Quote Icon */}
-              <div className="flex justify-between items-start mb-6">
-                <Quote className="w-8 h-8 text-blue-500 opacity-50" />
-                <div className="flex gap-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-accent/30 transition-all duration-300 group-hover:bg-blue-50/30 dark:group-hover:bg-blue-900/20"
+              >
+                <span className="font-semibold text-gray-900 dark:text-white text-lg pr-4">{faq.question}</span>
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm transition-all duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
+                    {openIndex === index ? (
+                      <ChevronUp className="w-4 h-4" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4" />
+                    )}
+                  </div>
                 </div>
-              </div>
-
-              {/* Quote */}
-              <blockquote className="text-lg text-gray-700 mb-6 leading-relaxed italic">
-                "{testimonial.quote}"
-              </blockquote>
-
-              {/* Author */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  {testimonial.name.split(' ').map(n => n[0]).join('')}
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-600">{testimonial.role}</div>
-                  <div className="text-sm text-blue-600 font-medium">{testimonial.school}</div>
+              </button>
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                openIndex === index ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="px-8 pb-6">
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-600 to-transparent mb-4"></div>
+                  <p className="text-gray-600 dark:text-gray-200 text-lg leading-relaxed">{faq.answer}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Navigation Dots */}
-        <div className="flex justify-center gap-2 mb-12">
-          {testimonials.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === activeIndex 
-                  ? 'bg-blue-600 scale-125' 
-                  : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-            />
-          ))}
+        {/* Secondary CTA near FAQ */}
+        <div className="mt-16 text-center">
+          <button 
+            onClick={() => {
+              const element = document.getElementById('waitlist');
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-10 py-4 rounded-full font-semibold hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 text-lg"
+          >
+            Get early access
+          </button>
         </div>
 
-        {/* Stats Section */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Trusted by Students Worldwide
-            </h3>
-            <p className="text-gray-600">
-              Join a community of ambitious students achieving their college dreams
+        {/* Compliance & Privacy Callout */}
+        <div className="mt-16 text-center">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-3xl p-8 border border-blue-200/50 dark:border-border/50 shadow-lg">
+            <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Trust & Privacy</h3>
+            <p className="text-gray-600 dark:text-gray-200 mb-6">
+              We don't sell data. You can delete your account anytime.
             </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">10,000+</div>
-              <div className="text-gray-600 text-sm">Active Students</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-indigo-600 mb-2">500+</div>
-              <div className="text-gray-600 text-sm">Colleges Applied</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600 mb-2">95%</div>
-              <div className="text-gray-600 text-sm">Acceptance Rate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600 mb-2">$2M+</div>
-              <div className="text-gray-600 text-sm">Scholarships Won</div>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Privacy Policy</a>
+              <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Terms</a>
+              <a href="mailto:hello@usesensei.app" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Contact</a>
             </div>
           </div>
         </div>

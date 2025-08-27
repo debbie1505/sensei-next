@@ -5,41 +5,60 @@ import { Moon, Sun } from "lucide-react";
 
 export default function DarkModeToggle() {
   const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const classList = document.documentElement.classList;
-    if (
+    setMounted(true);
+    const isDark = 
       localStorage.theme === "dark" ||
       (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      classList.add("dark");
-      setDarkMode(true);
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    
+    setDarkMode(isDark);
+    
+    if (isDark) {
+      document.documentElement.classList.add("dark");
     } else {
-      classList.remove("dark");
-      setDarkMode(false);
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
   const toggleDarkMode = () => {
-    const classList = document.documentElement.classList;
-    if (darkMode) {
-      classList.remove("dark");
-      localStorage.theme = "light";
-    } else {
-      classList.add("dark");
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add("dark");
       localStorage.theme = "dark";
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.theme = "light";
     }
-    setDarkMode(!darkMode);
   };
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <button
+        className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center transition-all duration-300"
+        aria-label="Toggle Dark Mode"
+      >
+        <div className="w-5 h-5 bg-muted-foreground/30 rounded animate-pulse" />
+      </button>
+    );
+  }
 
   return (
     <button
       onClick={toggleDarkMode}
-      className="text-gray-700 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
+      className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 hover:scale-105 hover:bg-accent shadow-sm hover:shadow-md"
       aria-label="Toggle Dark Mode"
     >
-      {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+      {darkMode ? (
+        <Sun size={20} className="text-yellow-500" />
+      ) : (
+        <Moon size={20} className="text-muted-foreground" />
+      )}
     </button>
   );
 }

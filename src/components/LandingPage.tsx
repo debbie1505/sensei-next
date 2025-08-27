@@ -1,20 +1,41 @@
 "use client";
-import Navbar from "./Navbar"
-import Footer from "./Footer"
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
+import ProductPreview from "./ProductPreview";
 import TestimonialsSection from "./TestimonialsSection";
 import WaitlistSection from "./WaitlistSection";
+import Footer from "./Footer";
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen flex flex-col">
-      <Navbar/>
+    <div className="min-h-screen">
+      {/* 1. Hero (Above the Fold) */}
       <HeroSection />
+      
+      {/* 2. Social Proof / Credibility Strip - Built into Hero */}
+      
+      {/* 3. Value Props */}
       <FeaturesSection />
-      <TestimonialsSection />
+      
+      {/* 4. How It Works - Built into FeaturesSection */}
+      
+      {/* 5. Product Preview */}
+      <ProductPreview />
+      
+      {/* 6. Equity Promise - Built into FeaturesSection */}
+      
+      {/* 7. Waitlist Module (Primary Conversion) */}
       <WaitlistSection />
-      <Footer/>
-    </main>
+      
+      {/* 8. Secondary CTAs - Distributed throughout */}
+      
+      {/* 9. FAQ */}
+      <TestimonialsSection />
+      
+      {/* 10. Compliance & Privacy Callout - Built into TestimonialsSection */}
+      
+      {/* 11. Footer */}
+      <Footer />
+    </div>
   );
 }
