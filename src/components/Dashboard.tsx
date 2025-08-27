@@ -18,24 +18,60 @@ type TimelineItem = {
   id: string;
   title: string;
   due_date: string;
-  status: string;
-  priority: string;
-  category: string;
+  start_date?: string;
+  status?: string;
+  priority?: string;
+  category?: string;
+  plan_id?: string;
+  description?: string;
+  notes?: string;
+  school?: string;
+  program?: string;
+  tags?: string[];
+  blockers?: string[];
+  links?: string[];
+  subtasks?: any;
+  source?: any;
+  created_at?: string;
+  updated_at?: string;
 };
 
 type EssaySubmission = {
   id: string;
   created_at: string;
-  essay: string;
-  feedback: string
+  draft: string;
+  feedback: any;
+  prompt?: string;
+  mode?: string;
 }
 
 type UserData = {
+  user_id: string;
   grade: number;
-  applicant_type: string;
-  college_type: string;
-  goals: string
+  gpa?: number;
+  major_interests?: string[];
+  state?: string;
+  citizenship?: string;
+  applicant_type?: string;
+  college_type?: string;
+  goals?: string;
+  created_at?: string;
+  updated_at?: string;
 }
+
+// src/components/Dashboard.tsx
+function logPgErr(prefix: string, err: unknown) {
+  const e: any = err;
+  console.error(prefix, {
+    type: e?.name ?? e?.constructor?.name,
+    status: e?.status ?? null,      // AuthApiError has status
+    code: e?.code ?? null,          // PostgrestError has code
+    message: e?.message ?? null,
+    details: e?.details ?? null,
+    hint: e?.hint ?? null,
+  });
+}
+
 
 export default function Dashboard() {
   const [submissions, setSubmissions] = useState<EssaySubmission[]>([]);
@@ -43,7 +79,7 @@ export default function Dashboard() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [timelineId, setTimelineId] = useState(null);
+  const [timelineId, setTimelineId] = useState<string | null>(null);
 
   function downloadTimeline(format: "json" | "text") {
     const filename = `sensei-timeline.${format === "json" ? "json" : "txt"}`;
@@ -69,74 +105,133 @@ export default function Dashboard() {
     URL.revokeObjectURL(url);
   }
 
-  useEffect(() => {
-    const fetchTimeline = async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("plans")
-        .select(`
-          *,
-          tasks (*)
-        `)
-        .order("created_at", { ascending: false })
-        .limit(1);
 
-      if (error) {
-        console.error("Failed to load timeline:", error);
-      } else if (data && data.length > 0) {
-        setTimeline(data[0].tasks || []);
-        setTimelineId(data[0].id);
-      }
-    };
+// Remove this old timeline fetch - we have a better one below
 
-    fetchTimeline();
-  }, []);
 
   // Fetch latest user onboarding data
   useEffect(() => {
-    const fetchUserData = async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1);
-
-      if (error) {
-        console.error("Failed to load user data:", error);
-      } else {
-        console.log(data.length);
-        console.log("Fetched user data", data);
-        if (data.length > 0) {
-          setUserData(data[0]);
+    const run = async () => {
+      try {
+        const supabase = createClient();
+    
+        // require a session
+        const { data: { session }, error: sErr } = await supabase.auth.getSession();
+        if (sErr || !session?.user) {
+          logPgErr("No session", sErr);
+          return;
         }
+        const uid = session.user.id;
+    
+        // First, try to get the latest plan
+        const { data: plan, error: planErr } = await supabase
+          .from("plans")
+          .select("id, title")
+          .eq("user_id", uid)
+          .order("created_at", { ascending: false })
+          .maybeSingle();
+    
+        if (planErr) {
+          logPgErr("Plan select failed", planErr);
+          return;
+        }
+    
+        if (plan) {
+          setTimelineId(plan.id);
+          
+          // Then fetch tasks for this plan
+          const { data: tasks, error: tasksErr } = await supabase
+            .from("tasks")
+            .select("*")
+            .eq("plan_id", plan.id)
+            .order("due_date", { ascending: true });
+      
+          if (tasksErr) {
+            logPgErr("Tasks select failed", tasksErr);
+            setTimeline([]);
+          } else {
+            setTimeline(tasks || []);
+          }
+          return;
+        }
+    
+        // none found → create one
+        const { data: created, error: insErr } = await supabase
+          .from("plans")
+          .insert({ 
+            user_id: uid,
+            title: "My Application Timeline"
+          })
+          .select("id")
+          .single();
+    
+        if (insErr) {
+          logPgErr("Timeline create failed", insErr);
+          return;
+        }
+    
+        setTimelineId(created.id);
+        setTimeline([]); // empty until user adds tasks
+      } catch (err) {
+        console.error("Timeline fetch error:", err);
+        setTimeline([]);
       }
     };
+  
+    run();
+  }, []);
 
-    fetchUserData();
+  // Fetch user profile data
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) return;
+        
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .single();
+    
+        if (error) {
+          logPgErr("Load profile failed", error);
+          setUserData(null);
+        } else {
+          setUserData(data);
+        }
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+        setUserData(null);
+      }
+    };
+    run();
   }, []);
 
   //  Fetch essay submissions
   useEffect(() => {
-    const fetchSubmissions = async () => {
+    const run = async () => {
       const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+  
       const { data, error } = await supabase
-        .from("essays")
-        .select("*")
+        .from("essay_submissions")            // <-- not "essays"
+        .select("id, created_at, draft, feedback") // adjust columns if yours differ
+        .eq("user_id", session.user.id)       // owner scope
         .order("created_at", { ascending: false });
-
+  
       if (error) {
-        console.error("Failed to load submissions:", error);
+        logPgErr("Load submissions failed", error);
       } else {
-        setSubmissions(data);
+        setSubmissions(data ?? []);
       }
-
       setLoading(false);
     };
-
-    fetchSubmissions();
+    run();
   }, []);
-
+  
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
@@ -213,17 +308,17 @@ export default function Dashboard() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Applicant Type:</span>
-                    <span className="font-medium">{userData.applicant_type}</span>
+                    <span className="font-medium">{userData.applicant_type || 'Not specified'}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Target Colleges:</span>
-                    <span className="font-medium">{userData.college_type}</span>
+                    <span className="font-medium">{userData.college_type || 'Not specified'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Goals:</span>
-                    <span className="font-medium">{userData.goals}</span>
+                    <span className="font-medium">{userData.goals || 'Not specified'}</span>
                   </div>
                 </div>
               </div>
@@ -274,10 +369,10 @@ export default function Dashboard() {
                         <CheckCircle className="w-5 h-5 text-green-500" />
                       </div>
                       <p className="text-gray-800 mb-2">
-                        <strong>Essay:</strong> {entry.essay.slice(0, 150)}...
+                        <strong>Essay:</strong> {entry.draft.slice(0, 150)}...
                       </p>
                       <p className="text-gray-600 text-sm">
-                        <strong>Feedback:</strong> {entry.feedback.slice(0, 100)}...
+                        <strong>Feedback:</strong> {typeof entry.feedback === 'string' ? entry.feedback.slice(0, 100) : JSON.stringify(entry.feedback).slice(0, 100)}...
                       </p>
                     </div>
                   ))}
@@ -381,20 +476,32 @@ export default function Dashboard() {
                         <>
                           <button
                             className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                            onClick={async () => {
-                              if (!timelineId) {
-                                console.error("Timeline ID not found");
-                                return;
-                              }
+                            // SAVE CHANGES button onClick (replace the whole body)
+onClick={async () => {
+  if (!timelineId) { console.error("Timeline ID not found"); return; }
 
-                                                                                    const supabase = createClient();
-                              const { error } = await supabase
-                          .from("tasks")
-                          .upsert(timeline.map(task => ({ ...task, plan_id: timelineId })));
+  try {
+    const supabase = createClient();
+    
+    // For now, we'll just update the plan's meta field with the timeline data
+    // In a real implementation, you'd want to update individual tasks
+    const { error } = await supabase
+      .from("plans")
+      .update({ meta: { tasks: timeline } })
+      .eq("id", timelineId)
+      .select("id")
+      .single();
 
-                              if (error) console.error("Save failed:", error);
-                              else setIsEditing(false);
-                            }}
+    if (error) {
+      logPgErr("Save timeline failed", error);
+    } else {
+      setIsEditing(false);
+    }
+  } catch (err) {
+    console.error("Save timeline error:", err);
+  }
+}}
+
                           >
                             <CheckCircle className="w-4 h-4 mr-2" />
                             Save Changes
