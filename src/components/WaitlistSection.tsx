@@ -41,28 +41,22 @@ export default function WaitlistSection() {
   };
 
   return (
-    <section id="waitlist" className="py-32 px-6 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 relative overflow-hidden">
-      {/* Enhanced Background decoration */}
+    <section id="waitlist" className="py-32 px-6 bg-gradient-to-br from-teal-700 via-cyan-800 to-teal-800 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-white/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-white/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        
-        {/* Floating elements */}
-        <div className="absolute top-20 right-20 w-4 h-4 bg-white/30 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute bottom-32 left-32 w-6 h-6 bg-white/20 rounded-full animate-bounce" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '2.5s' }} />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-white/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-20 right-20 w-4 h-4 bg-white/30 rounded-full animate-bounce" style={{ animationDelay: "0.5s" }} />
+        <div className="absolute bottom-32 left-32 w-6 h-6 bg-white/20 rounded-full animate-bounce" style={{ animationDelay: "1.5s" }} />
       </div>
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
-        {/* Enhanced Header */}
         <div className="mb-16">
           <h2 className="text-5xl md:text-6xl font-bold mb-8 text-white tracking-tight">
             Get early access
           </h2>
-          
-          <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed font-light">
-            Be first to try Sensei. Join the waitlist and get notified when we launch.
+          <p className="text-xl md:text-2xl text-teal-100 max-w-3xl mx-auto leading-relaxed font-light">
+            For schools and counseling offices. Join the waitlist and we’ll reach out when Sensei is ready for you.
           </p>
         </div>
 
@@ -71,8 +65,8 @@ export default function WaitlistSection() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <Mail className="w-5 h-5 text-blue-200 group-focus-within:text-white transition-colors" />
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <Mail className="w-5 h-5 text-teal-200 group-focus-within:text-white transition-colors" />
               </div>
               <input
                 type="email"
@@ -80,7 +74,7 @@ export default function WaitlistSection() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email (required)"
-                className="w-full pl-14 pr-5 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 transition-all duration-300 backdrop-blur-sm"
+                className="w-full pl-14 pr-5 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 transition-all duration-300 backdrop-blur-sm"
                 disabled={status === "loading"}
               />
             </div>
@@ -88,7 +82,7 @@ export default function WaitlistSection() {
             {/* Grade Field */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <GraduationCap className="w-5 h-5 text-blue-200 group-focus-within:text-white transition-colors" />
+                <GraduationCap className="w-5 h-5 text-teal-200 group-focus-within:text-white transition-colors" />
               </div>
               <select
                 value={grade}
@@ -104,14 +98,14 @@ export default function WaitlistSection() {
                 <option value="transfer">Transfer Student</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-blue-200"></div>
+                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-teal-200" />
               </div>
             </div>
 
             {/* Graduation Year Field */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <Calendar className="w-5 h-5 text-blue-200 group-focus-within:text-white transition-colors" />
+                <Calendar className="w-5 h-5 text-teal-200 group-focus-within:text-white transition-colors" />
               </div>
               <select
                 value={graduationYear}
@@ -127,14 +121,14 @@ export default function WaitlistSection() {
                 <option value="2029">2029</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-blue-200"></div>
+                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-teal-200" />
               </div>
             </div>
 
             {/* Biggest Challenge Field */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <Target className="w-5 h-5 text-blue-200 group-focus-within:text-white transition-colors" />
+                <Target className="w-5 h-5 text-teal-200 group-focus-within:text-white transition-colors" />
               </div>
               <select
                 value={biggestChallenge}
@@ -149,7 +143,7 @@ export default function WaitlistSection() {
                 <option value="dont_know">Don't know</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-blue-200"></div>
+                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-teal-200" />
               </div>
             </div>
             
@@ -174,7 +168,7 @@ export default function WaitlistSection() {
 
           {/* Enhanced Privacy Notice */}
           <div className="mt-6 p-4 bg-white/10 rounded-2xl border border-white/20">
-            <p className="text-blue-100 text-sm font-medium">
+            <p className="text-teal-100 text-sm font-medium">
               We use your info only to contact you about Sensei. No resale. Ever.
             </p>
           </div>
@@ -199,8 +193,8 @@ export default function WaitlistSection() {
         {/* Enhanced Social Proof */}
         <div className="mt-20 pt-12 border-t border-white/20">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 max-w-2xl mx-auto">
-            <p className="text-blue-100 text-lg mb-4 font-medium">Coming out of private beta.</p>
-            <p className="text-blue-100 text-base">
+            <p className="text-teal-100 text-lg mb-4 font-medium">Coming out of private beta.</p>
+            <p className="text-teal-100 text-base">
               Want your school to pilot Sensei? <a href="mailto:hello@usesensei.app" className="text-white hover:underline font-medium">Email hello@usesensei.app</a>.
             </p>
           </div>

@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sensei - Your AI College Mentor",
+  title: "Sensei - College Application Management for Counselors & Schools",
   description:
-    "Build a stronger college application with Sensei's personalized tools.",
+    "A centralized system that helps counselors manage applications efficiently and helps students submit stronger, more competitive applications.",
 };
 
 export default function RootLayout({

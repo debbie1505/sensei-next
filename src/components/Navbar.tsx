@@ -53,10 +53,10 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           {/* Enhanced Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+            <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
               Sensei
             </span>
           </Link>
@@ -103,7 +103,7 @@ export default function Navbar() {
                       Scholarships
                     </Link>
                     <div className="flex items-center gap-2 ml-4 pl-4 border-l border-border">
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
                         <UserIcon className="w-4 h-4 text-white" />
                       </div>
                       <button
@@ -117,27 +117,21 @@ export default function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link 
-                      href="#features" 
+                    <Link
+                      href="#features"
                       className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
                     >
                       Features
                     </Link>
                     <Link
-                      href="#testimonials"
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
-                    >
-                      FAQ
-                    </Link>
-                    <Link 
-                      href="/login" 
+                      href="/login"
                       className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
                     >
                       Log In
                     </Link>
                     <Link
                       href="#waitlist"
-                      className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold"
+                      className="ml-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-2 rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg font-semibold"
                     >
                       Join Waitlist
                     </Link>
@@ -164,7 +158,7 @@ export default function Navbar() {
                         onClick={() => setOpen(false)}
                         className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium flex items-center gap-3"
                       >
-                        <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                        <div className="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center">
                           <span className="text-white text-xs font-bold">D</span>
                         </div>
                         Dashboard
@@ -214,22 +208,15 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Link 
-                        href="#features" 
+                      <Link
+                        href="#features"
                         onClick={() => setOpen(false)}
                         className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
                       >
                         Features
                       </Link>
-                      <Link 
-                        href="#testimonials" 
-                        onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
-                      >
-                        FAQ
-                      </Link>
-                      <Link 
-                        href="/login" 
+                      <Link
+                        href="/login"
                         onClick={() => setOpen(false)}
                         className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
                       >
@@ -238,7 +225,7 @@ export default function Navbar() {
                       <Link
                         href="#waitlist"
                         onClick={() => setOpen(false)}
-                        className="mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold text-center block"
+                        className="mt-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-3 rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-300 font-semibold text-center block"
                       >
                         Join Waitlist
                       </Link>
