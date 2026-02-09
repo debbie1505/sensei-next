@@ -208,19 +208,12 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Link 
-                        href="#features" 
+                      <Link
+                        href="#features"
                         onClick={() => setOpen(false)}
                         className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
                       >
                         Features
-                      </Link>
-                      <Link
-                        href="#waitlist"
-                        onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
-                      >
-                        Get early access
                       </Link>
                       <Link
                         href="/login"
