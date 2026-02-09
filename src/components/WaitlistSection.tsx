@@ -193,8 +193,8 @@ export default function WaitlistSection() {
         {/* Enhanced Social Proof */}
         <div className="mt-20 pt-12 border-t border-white/20">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 max-w-2xl mx-auto">
-            <p className="text-blue-100 text-lg mb-4 font-medium">Coming out of private beta.</p>
-            <p className="text-blue-100 text-base">
+            <p className="text-teal-100 text-lg mb-4 font-medium">Coming out of private beta.</p>
+            <p className="text-teal-100 text-base">
               Want your school to pilot Sensei? <a href="mailto:hello@usesensei.app" className="text-white hover:underline font-medium">Email hello@usesensei.app</a>.
             </p>
           </div>

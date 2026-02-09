@@ -13,23 +13,22 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Enhanced Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <Link href="/" className="text-3xl font-bold text-blue-400">
+              <Link href="/" className="text-3xl font-bold text-teal-400">
                 Sensei
               </Link>
             </div>
             <p className="text-gray-300 mb-8 max-w-md text-lg leading-relaxed">
-              An AI mentor for college applications. Turn chaos into a step-by-step plan.
+              College application management for counselors and schools. One system to manage applications at scale and help students submit stronger applications.
             </p>
             <div className="flex space-x-4">
-              <a 
-                href="mailto:hello@usesensei.app" 
-                className="text-gray-400 hover:text-blue-400 transition-all duration-300 transform hover:scale-110 bg-gray-800/50 p-3 rounded-xl hover:bg-gray-700/50"
+              <a
+                href="mailto:hello@usesensei.app"
+                className="text-gray-400 hover:text-teal-400 transition-all duration-300 transform hover:scale-110 bg-gray-800/50 p-3 rounded-xl hover:bg-gray-700/50"
               >
                 <Mail className="w-5 h-5" />
               </a>
