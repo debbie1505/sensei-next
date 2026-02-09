@@ -2,17 +2,19 @@
 import React, { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import Link from "next/link";
-import { 
-  FileText, 
-  Calendar, 
-  User, 
-  Clock, 
-  Plus, 
+import {
+  FileText,
+  Calendar,
+  User,
+  Clock,
+  Plus,
   Download,
   Edit3,
   CheckCircle,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
+import CounselorDashboard from "./CounselorDashboard";
+import KeyPersonDashboard from "./KeyPersonDashboard";
 
 type TimelineItem = {
   id: string;
@@ -47,7 +49,8 @@ type EssaySubmission = {
 
 type UserData = {
   user_id: string;
-  grade: number;
+  role?: "student" | "counselor" | "key_person" | null;
+  grade?: number;
   gpa?: number;
   major_interests?: string[];
   state?: string;
@@ -231,9 +234,16 @@ export default function Dashboard() {
     };
     run();
   }, []);
-  
+
+  if (userData?.role === "counselor") {
+    return <CounselorDashboard />;
+  }
+  if (userData?.role === "key_person") {
+    return <KeyPersonDashboard />;
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-background p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
