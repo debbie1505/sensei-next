@@ -98,14 +98,14 @@ export default function WaitlistSection() {
                 <option value="transfer">Transfer Student</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-blue-200"></div>
+                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-teal-200" />
               </div>
             </div>
 
             {/* Graduation Year Field */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <Calendar className="w-5 h-5 text-blue-200 group-focus-within:text-white transition-colors" />
+                <Calendar className="w-5 h-5 text-teal-200 group-focus-within:text-white transition-colors" />
               </div>
               <select
                 value={graduationYear}
@@ -121,14 +121,14 @@ export default function WaitlistSection() {
                 <option value="2029">2029</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-blue-200"></div>
+                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-teal-200" />
               </div>
             </div>
 
             {/* Biggest Challenge Field */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <Target className="w-5 h-5 text-blue-200 group-focus-within:text-white transition-colors" />
+                <Target className="w-5 h-5 text-teal-200 group-focus-within:text-white transition-colors" />
               </div>
               <select
                 value={biggestChallenge}
@@ -143,7 +143,7 @@ export default function WaitlistSection() {
                 <option value="dont_know">Don't know</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-blue-200"></div>
+                <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-teal-200" />
               </div>
             </div>
             
@@ -168,7 +168,7 @@ export default function WaitlistSection() {
 
           {/* Enhanced Privacy Notice */}
           <div className="mt-6 p-4 bg-white/10 rounded-2xl border border-white/20">
-            <p className="text-blue-100 text-sm font-medium">
+            <p className="text-teal-100 text-sm font-medium">
               We use your info only to contact you about Sensei. No resale. Ever.
             </p>
           </div>
