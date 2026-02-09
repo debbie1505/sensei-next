@@ -8,6 +8,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
+    role: "" as "" | "student" | "counselor" | "key_person",
     year: "",
     applicantType: "",
     testScores: "",
@@ -51,6 +52,7 @@ export default function Onboarding() {
 
     const payload = {
       user_id: session.user.id,
+      role: formData.role || "student",
       grade,
       applicant_type: formData.applicantType || null,
       college_type: formData.collegeType || null,
@@ -90,18 +92,30 @@ export default function Onboarding() {
       case 1:
         return (
           <div>
+            <h2 className="text-xl font-bold mb-4">Who are you?</h2>
+            <p className="text-muted-foreground mb-4">This helps us show you the right dashboard.</p>
+            <select name="role" value={formData.role} onChange={handleChange} className="border border-input p-2 rounded w-full bg-background">
+              <option value="">Select</option>
+              <option value="student">Student</option>
+              <option value="counselor">Counselor</option>
+              <option value="key_person">Teacher / Recommender</option>
+            </select>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
             <h2 className="text-xl font-bold mb-4">What year are you in?</h2>
-            <select name="year" value={formData.year} onChange={handleChange} className="border p-2 rounded">
+            <select name="year" value={formData.year} onChange={handleChange} className="border border-input p-2 rounded w-full bg-background">
               <option value="">Select</option>
               <option value="9">9th Grade</option>
               <option value="10">10th Grade</option>
               <option value="11">11th Grade</option>
               <option value="12">12th Grade</option>
-              {/* Remove "transfer" from year; capture that in applicantType */}
             </select>
           </div>
         );
-      case 2:
+      case 3:
         return (
           <div>
             <h2 className="text-xl font-bold mb-4">What type of applicant are you?</h2>
