@@ -2,10 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { ChevronLeft, FileText, Calendar, User } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-function StudentDetailPage({ params }: { params: { id: string } }) {
+function StudentDetailPage() {
+  const params = useParams();
+  const id = params?.id as string;
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-10">
@@ -14,7 +17,7 @@ function StudentDetailPage({ params }: { params: { id: string } }) {
           Back to caseload
         </Link>
         <h1 className="text-3xl font-bold text-foreground mb-2">Student detail</h1>
-        <p className="text-muted-foreground mb-8 font-mono text-sm">{params.id}</p>
+        <p className="text-muted-foreground mb-8 font-mono text-sm">{id}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="rounded-2xl border border-border bg-card p-6">
             <FileText className="w-8 h-8 text-primary mb-3" />
@@ -37,15 +40,10 @@ function StudentDetailPage({ params }: { params: { id: string } }) {
   );
 }
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
+export default function Page() {
   return (
     <ProtectedRoute>
-      <StudentDetailWrapper params={params} />
+      <StudentDetailPage />
     </ProtectedRoute>
   );
-}
-
-async function StudentDetailWrapper({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  return <StudentDetailPage params={{ id }} />;
 }

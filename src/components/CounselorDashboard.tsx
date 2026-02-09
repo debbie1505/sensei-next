@@ -24,29 +24,41 @@ export default function CounselorDashboard() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
 
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("school_id")
         .eq("user_id", session.user.id)
         .single();
+
+      if (profileError) {
+        console.error("Failed to load counselor profile:", profileError);
+        setLoading(false);
+        return;
+      }
 
       if (!profile?.school_id) {
         setLoading(false);
         return;
       }
 
-      const { data: school } = await supabase
+      const { data: school, error: schoolError } = await supabase
         .from("schools")
         .select("name")
         .eq("id", profile.school_id)
         .single();
+      if (schoolError) {
+        console.error("Failed to load school:", schoolError);
+      }
       setSchoolName(school?.name ?? null);
 
-      const { data: studentList } = await supabase
+      const { data: studentList, error: studentError } = await supabase
         .from("profiles")
         .select("user_id, grade, goals, applicant_type")
         .eq("school_id", profile.school_id)
         .eq("role", "student");
+      if (studentError) {
+        console.error("Failed to load students:", studentError);
+      }
       setStudents(studentList ?? []);
 
       const { count } = await supabase

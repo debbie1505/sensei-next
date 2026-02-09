@@ -130,25 +130,19 @@ Track these metrics for success:
 - **Railway**: Good for full-stack apps
 - **AWS/GCP**: For enterprise deployments
 
-## 📈 Roadmap
+## Roadmap
 
-### Phase 1 (Current)
-- ✅ Essay review with structured feedback
-- ✅ Timeline generation and management
-- ✅ Basic scholarship matching
-- ✅ User authentication and profiles
+### Current
+- Counselor and key-person dashboards (caseload, assigned students)
+- Role-based onboarding (student, counselor, teacher/recommender)
+- Essay review, timeline, and scholarship matching for students
+- Schools and alerts schema; RLS for multi-tenant readiness
 
-### Phase 2 (Next 30 days)
-- [ ] Notifications and reminders
-- [ ] Enhanced diff UI for essay revisions
-- [ ] Basic analytics dashboard
-- [ ] Export functionality (PDF)
-
-### Phase 3 (Next 60 days)
-- [ ] Advanced scholarship matching with embeddings
-- [ ] Counselor share links
-- [ ] Mobile app optimization
-- [ ] Advanced analytics
+### Next
+- Alert generation (missed deadlines, low engagement, weak essays)
+- Counselor notes and essay feedback workflow
+- Key person essay/LOR views and commenting
+- School admin and invite flows
 
 ## 🤝 Contributing
 
@@ -162,10 +156,10 @@ Track these metrics for success:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🆘 Support
+## Support
 
-For support, email support@sensei.com or create an issue in this repository.
+For support or to pilot Sensei at your school, email **hello@usesensei.app** or open an issue in this repository.
 
 ---
 
-**Built with ❤️ for students navigating the college application process.**
+**Built for counselors and students.**

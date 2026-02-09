@@ -73,3 +73,23 @@ CREATE POLICY "Counselor updates own alerts" ON alerts FOR UPDATE USING (counsel
 
 -- Trigger for schools updated_at
 CREATE TRIGGER update_schools_updated_at BEFORE UPDATE ON schools FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Counselors can view student profiles in their school (applied to existing profiles table)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE policyname = 'Counselors can view students in own school' AND tablename = 'profiles'
+  ) THEN
+    CREATE POLICY "Counselors can view students in own school" ON profiles FOR SELECT
+      USING (
+        EXISTS (
+          SELECT 1 FROM profiles AS counselor
+          WHERE counselor.user_id = auth.uid()
+            AND counselor.role = 'counselor'
+            AND counselor.school_id IS NOT NULL
+            AND counselor.school_id = profiles.school_id
+            AND profiles.role = 'student'
+        )
+      );
+  END IF;
+END $$;

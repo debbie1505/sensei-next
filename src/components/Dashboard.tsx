@@ -220,9 +220,9 @@ export default function Dashboard() {
       if (!session?.user) return;
   
       const { data, error } = await supabase
-        .from("essay_submissions")            // <-- not "essays"
-        .select("id, created_at, draft, feedback") // adjust columns if yours differ
-        .eq("user_id", session.user.id)       // owner scope
+        .from("essays")
+        .select("id, created_at, draft, feedback")
+        .eq("user_id", session.user.id)
         .order("created_at", { ascending: false });
   
       if (error) {
@@ -314,7 +314,7 @@ export default function Dashboard() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Grade:</span>
-                    <span className="font-medium">{userData.grade}</span>
+                    <span className="font-medium">{userData.grade ?? 'Not specified'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Applicant Type:</span>

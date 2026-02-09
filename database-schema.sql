@@ -146,6 +146,19 @@ CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.ui
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+-- Counselors can view student profiles in their school
+CREATE POLICY "Counselors can view students in own school" ON profiles FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles AS counselor
+      WHERE counselor.user_id = auth.uid()
+        AND counselor.role = 'counselor'
+        AND counselor.school_id IS NOT NULL
+        AND counselor.school_id = profiles.school_id
+        AND profiles.role = 'student'
+    )
+  );
+
 -- Essays policies
 CREATE POLICY "Users can view own essays" ON essays FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert own essays" ON essays FOR INSERT WITH CHECK (auth.uid() = user_id);

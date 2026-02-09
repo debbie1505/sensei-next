@@ -119,7 +119,7 @@ export default function Onboarding() {
         return (
           <div>
             <h2 className="text-xl font-bold mb-4">What type of applicant are you?</h2>
-            <select name="applicantType" value={formData.applicantType} onChange={handleChange} className="border p-2 rounded">
+            <select name="applicantType" value={formData.applicantType} onChange={handleChange} className="border border-input p-2 rounded w-full bg-background">
               <option value="">Select</option>
               <option value="first-year">First-Year</option>
               <option value="transfer">Transfer</option>
@@ -127,22 +127,22 @@ export default function Onboarding() {
             </select>
           </div>
         );
-      case 3:
+      case 4:
         return (
           <div>
             <h2 className="text-xl font-bold mb-4">Do you have test scores?</h2>
-            <select name="testScores" value={formData.testScores} onChange={handleChange} className="border p-2 rounded">
+            <select name="testScores" value={formData.testScores} onChange={handleChange} className="border border-input p-2 rounded w-full bg-background">
               <option value="">Select</option>
               <option value="yes">Yes</option>
               <option value="no">Not yet</option>
             </select>
           </div>
         );
-      case 4:
+      case 5:
         return (
           <div>
             <h2 className="text-xl font-bold mb-4">What kind of colleges are you aiming for?</h2>
-            <select name="collegeType" value={formData.collegeType} onChange={handleChange} className="border p-2 rounded">
+            <select name="collegeType" value={formData.collegeType} onChange={handleChange} className="border border-input p-2 rounded w-full bg-background">
               <option value="">Select</option>
               <option value="ivies">Ivies / T20</option>
               <option value="in-state">In-State</option>
@@ -151,19 +151,19 @@ export default function Onboarding() {
             </select>
           </div>
         );
-      case 5:
-        return (
-          <div>
-            <h2 className="text-xl font-bold mb-4">What are your goals or interests?</h2>
-            <textarea name="goals" value={formData.goals} onChange={handleChange} placeholder="Tell us your goals..." className="border p-2 rounded w-full" />
-          </div>
-        );
       case 6:
         return (
           <div>
+            <h2 className="text-xl font-bold mb-4">What are your goals or interests?</h2>
+            <textarea name="goals" value={formData.goals} onChange={handleChange} placeholder="Tell us your goals..." className="border border-input p-2 rounded w-full bg-background min-h-[100px]" />
+          </div>
+        );
+      case 7:
+        return (
+          <div>
             <h2 className="text-2xl font-bold mb-4">All set!</h2>
-            <p className="mb-4">Click submit to save your info and get started</p>
-            <button onClick={submitOnboarding} className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            <p className="mb-4">Click submit to save your info and go to your dashboard.</p>
+            <button onClick={submitOnboarding} className="px-4 py-2 bg-primary text-primary-foreground rounded hover:opacity-90">
               Submit
             </button>
           </div>
@@ -194,12 +194,12 @@ export default function Onboarding() {
       {renderStep()}
       <div className="mt-6 flex justify-between">
         {step > 1 && (
-          <button onClick={prevStep} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+          <button onClick={prevStep} className="px-4 py-2 bg-muted rounded hover:bg-muted/80">
             Back
           </button>
         )}
-        {step < 6 && (
-          <button onClick={nextStep} className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        {step < 7 && (
+          <button onClick={nextStep} className="ml-auto px-4 py-2 bg-primary text-primary-foreground rounded hover:opacity-90">
             Next
           </button>
         )}
