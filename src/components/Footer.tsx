@@ -86,7 +86,7 @@ export default function Footer() {
               Terms
             </a>
             <span className="text-gray-400 text-sm flex items-center gap-2">
-              Made with <Heart className="w-4 h-4 text-red-500 animate-pulse" /> for students
+              Made with <Heart className="w-4 h-4 text-red-500 animate-pulse" /> for counselors and students
             </span>
           </div>
         </div>
