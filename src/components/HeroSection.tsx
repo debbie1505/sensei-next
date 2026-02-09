@@ -1,74 +1,98 @@
 "use client";
-import { ArrowDown, Users, Shield, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-white via-teal-50/30 to-cyan-100/40 dark:from-gray-900 dark:via-teal-900/20 dark:to-cyan-900/30 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-teal-500/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-500/5 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-20 right-20 w-4 h-4 bg-teal-500/30 rounded-full animate-bounce" style={{ animationDelay: "0.5s" }} />
-        <div className="absolute bottom-32 left-32 w-6 h-6 bg-cyan-500/20 rounded-full animate-bounce" style={{ animationDelay: "1.5s" }} />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center flex-1 flex flex-col items-center justify-center pt-24 pb-32">
-        <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-card/80 backdrop-blur-sm border border-teal-200/50 dark:border-teal-700/50 rounded-full px-6 py-3 mb-8 text-sm font-medium text-teal-700 dark:text-teal-200 shadow-lg">
-          <div className="w-2 h-2 bg-teal-500 rounded-full animate-pulse" />
-          For counselors and schools
-        </div>
-
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tight">
-          <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-700 dark:from-teal-300 dark:via-cyan-300 dark:to-teal-400 bg-clip-text text-transparent">
-            Manage applications at scale.
-          </span>
-        </h1>
-
-        <p className="text-xl md:text-2xl lg:text-3xl text-gray-600 dark:text-gray-100 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-          A centralized system that helps counselors run applications efficiently and helps students submit stronger, more competitive applications.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-          <button
-            onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
-            className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-10 py-5 rounded-full font-semibold hover:from-teal-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl shadow-teal-500/25 text-lg min-w-[200px]"
-          >
-            Get early access
-          </button>
-          <button
-            onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
-            className="bg-white/80 dark:bg-card/80 backdrop-blur-sm border border-gray-300/50 dark:border-border/50 text-gray-700 dark:text-gray-100 px-10 py-5 rounded-full font-semibold hover:bg-white dark:hover:bg-card transition-all duration-300 transform hover:scale-105 shadow-lg text-lg min-w-[200px]"
-          >
-            Learn more
-          </button>
-        </div>
-
-        <p className="text-gray-500 dark:text-gray-300 text-sm mb-10">
-          Free during beta. No spam.
-        </p>
-
-        <div className="bg-white/60 dark:bg-card/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-border/50 shadow-lg max-w-4xl mx-auto w-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center justify-center gap-3 p-4 bg-white/50 dark:bg-card/50 rounded-xl border border-gray-200/30 dark:border-border/30">
-              <Users className="w-5 h-5 text-teal-500 dark:text-teal-300" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Built with counselors, students, and schools</span>
+    <section className="relative bg-white dark:bg-background pt-24 pb-16 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Copy */}
+          <div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+              One place to manage the entire college application process.
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+              Sensei helps counselors, teachers, and students coordinate essays, recommendations, deadlines, and guidance—without email chaos or expensive private consultants.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+                className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-lg flex items-center justify-center gap-2"
+              >
+                Request a pilot
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+                className="border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-lg"
+              >
+                Join the waitlist
+              </button>
             </div>
-            <div className="flex items-center justify-center gap-3 p-4 bg-white/50 dark:bg-card/50 rounded-xl border border-gray-200/30 dark:border-border/30">
-              <Shield className="w-5 h-5 text-teal-500 dark:text-teal-300" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Privacy-first design</span>
+          </div>
+
+          {/* Right: Product Screenshot */}
+          <div className="relative">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+              {/* Counselor Dashboard Mock */}
+              <div className="bg-white dark:bg-card p-1">
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                  <div className="w-3 h-3 rounded-full bg-red-400" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                  <div className="w-3 h-3 rounded-full bg-green-400" />
+                  <span className="ml-4 text-sm text-gray-500 dark:text-gray-400">Counselor Dashboard</span>
+                </div>
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="text-lg font-semibold text-gray-900 dark:text-white">Your Caseload</div>
+                    <div className="text-sm text-gray-500">142 students</div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">89</div>
+                      <div className="text-xs text-green-700 dark:text-green-300">On track</div>
+                    </div>
+                    <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">41</div>
+                      <div className="text-xs text-yellow-700 dark:text-yellow-300">Needs attention</div>
+                    </div>
+                    <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">12</div>
+                      <div className="text-xs text-red-700 dark:text-red-300">At risk</div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600" />
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">Sarah M.</div>
+                        <div className="text-xs text-gray-500">Essay due in 3 days</div>
+                      </div>
+                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600" />
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">James T.</div>
+                        <div className="text-xs text-gray-500">Waiting on 2 recommendations</div>
+                      </div>
+                      <div className="w-2 h-2 rounded-full bg-red-500" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-3 p-4 bg-white/50 dark:bg-card/50 rounded-xl border border-gray-200/30 dark:border-border/30">
-              <Zap className="w-5 h-5 text-cyan-500 dark:text-cyan-300" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Early testers at 20+ schools</span>
+            {/* Small callouts for other views */}
+            <div className="absolute -bottom-4 -left-4 bg-white dark:bg-card rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3 text-xs">
+              <div className="font-medium text-gray-900 dark:text-white">Student View</div>
+              <div className="text-gray-500">Essays, tasks, deadlines</div>
+            </div>
+            <div className="absolute -bottom-4 -right-4 bg-white dark:bg-card rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3 text-xs">
+              <div className="font-medium text-gray-900 dark:text-white">Teacher View</div>
+              <div className="text-gray-500">LORs, essay reviews</div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="relative z-10 pb-8 flex flex-col items-center gap-2 text-gray-400 dark:text-gray-500 animate-bounce">
-        <span className="text-sm font-medium">Scroll to explore</span>
-        <ArrowDown className="w-6 h-6" />
       </div>
     </section>
   );
