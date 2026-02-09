@@ -1,65 +1,55 @@
 "use client";
 import Link from "next/link";
-import { Heart, Mail, Sparkles } from "lucide-react";
+import { Mail, Sparkles } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+    <footer className="bg-gray-900 dark:bg-black text-white">
+      <div className="max-w-6xl mx-auto px-6 py-16">
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
+          {/* Brand */}
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-gray-900" />
               </div>
-              <Link href="/" className="text-3xl font-bold text-teal-400">
+              <Link href="/" className="text-2xl font-bold">
                 Sensei
               </Link>
             </div>
-            <p className="text-gray-300 mb-8 max-w-md text-lg leading-relaxed">
-              College application management for counselors and schools. One system to manage applications at scale and help students submit stronger applications.
+            <p className="text-gray-400 max-w-md mb-6">
+              One system for counselors, teachers, and students to manage the college application process together.
             </p>
-            <div className="flex space-x-4">
-              <a
-                href="mailto:hello@usesensei.app"
-                className="text-gray-400 hover:text-teal-400 transition-all duration-300 transform hover:scale-110 bg-gray-800/50 p-3 rounded-xl hover:bg-gray-700/50"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-            </div>
+            <a
+              href="mailto:hello@usesensei.app"
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              hello@usesensei.app
+            </a>
           </div>
 
-          {/* Enhanced Links */}
+          {/* Links */}
           <div>
-            <h3 className="text-xl font-semibold mb-6 text-white">Links</h3>
-            <ul className="space-y-4">
+            <h4 className="font-semibold mb-4">Links</h4>
+            <ul className="space-y-3 text-gray-400">
               <li>
-                <Link 
-                  href="#features" 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
-                >
+                <Link href="#features" className="hover:text-white transition-colors">
                   Features
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="#waitlist" 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
-                >
-                  Join Waitlist
+                <Link href="#product-preview" className="hover:text-white transition-colors">
+                  Product
                 </Link>
               </li>
               <li>
-                <a 
-                  href="mailto:hello@usesensei.app" 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
-                >
+                <Link href="#cta" className="hover:text-white transition-colors">
+                  Get Access
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:hello@usesensei.app" className="hover:text-white transition-colors">
                   Contact
                 </a>
               </li>
@@ -67,35 +57,26 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Enhanced Bottom */}
-        <div className="border-t border-gray-800 mt-16 pt-12 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Sensei. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <a 
-              href="#" 
-              className="text-gray-400 hover:text-white text-sm transition-all duration-300 hover:underline"
-            >
-              Privacy
-            </a>
-            <a 
-              href="#" 
-              className="text-gray-400 hover:text-white text-sm transition-all duration-300 hover:underline"
-            >
-              Terms
-            </a>
-            <span className="text-gray-400 text-sm flex items-center gap-2">
-              Made with <Heart className="w-4 h-4 text-red-500 animate-pulse" /> for counselors and students
-            </span>
+        {/* Divider */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-500 text-sm">
+              &copy; {new Date().getFullYear()} Sensei. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+              <a href="#" className="hover:text-white transition-colors">
+                Privacy
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Terms
+              </a>
+            </div>
           </div>
-        </div>
 
-        {/* Enhanced Compliance */}
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="bg-gray-800/50 rounded-2xl p-6 text-center backdrop-blur-sm border border-gray-700/50">
-            <p className="text-gray-300 text-sm font-medium">
-              13+ only. Sensei is guidance, not legal/financial advice.
+          {/* Privacy / FERPA Note */}
+          <div className="mt-8 p-4 bg-gray-800 rounded-xl text-center">
+            <p className="text-gray-400 text-sm">
+              Built for students, schools, and educators. FERPA-aware design. 13+ only.
             </p>
           </div>
         </div>
