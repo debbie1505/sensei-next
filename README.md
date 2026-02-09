@@ -1,14 +1,24 @@
-# Sensei - Your AI College Mentor
+# Sensei - College Application Management for Counselors & Schools
 
-A comprehensive college application platform that provides personalized essay feedback, timeline generation, and scholarship matching using AI.
+A centralized platform that helps counselors manage applications at scale and helps students submit stronger, more competitive applications. B2B2C: schools license Sensei; counselors oversee students; students use one workspace for applications, essays, and timelines.
 
-## 🚀 Features
+## Features
 
-### Core Features
+### For counselors
+- **Caseload view**: See all students in your school, with at-a-glance status
+- **Alerts**: Missed deadlines, low engagement, and essay risk flags
+- **Student detail**: Essays, timeline, and counselor notes per student
+- **Feedback tools**: Inline essay comments and approval workflow (coming soon)
+
+### For students
 - **AI Essay Review**: Structured feedback with rubric scoring and revision suggestions
-- **Personalized Timeline**: AI-generated application timelines with task management
-- **Scholarship Matching**: Curated and AI-generated scholarship recommendations
-- **User Profiles**: Comprehensive student profiles for personalized recommendations
+- **Timeline**: AI-generated application timelines with task management
+- **Scholarship matching**: Curated and AI-generated scholarship recommendations
+- **One workspace**: Applications, essays, and deadlines in one place
+
+### For teachers / recommenders (key people)
+- **Assigned students only**: Essay reviewer or LOR writer role per student
+- **Task-based access**: Only the materials needed for your role
 
 ### Technical Features
 - **Modern Stack**: Next.js 15, TypeScript, Tailwind CSS
@@ -41,12 +51,15 @@ src/
 ```
 
 ### Database Schema
-- **profiles**: User profile data
+- **profiles**: User profile data (role: student, counselor, key_person; optional school_id)
+- **schools**: Schools for B2B licensing
 - **essays**: Essay submissions with AI feedback
 - **plans**: Timeline containers
 - **tasks**: Individual timeline items
 - **kb_items**: Curated scholarships/programs
 - **user_saves**: User bookmarks
+- **key_person_assignments**: Teacher/recommender assignments (essay_reviewer, lor_writer)
+- **alerts**: Counselor alerts (missed_deadline, low_engagement, weak_essay)
 
 ## 🛠️ Setup
 
@@ -79,9 +92,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ### 3. Database Setup
 1. Create a new Supabase project
-2. Run the SQL from `database-schema.sql` in your Supabase SQL editor
-3. Enable Row Level Security (RLS) on all tables
-4. Set up the authentication policies
+2. Run the SQL from `database-schema.sql` in your Supabase SQL editor (or apply migrations in `supabase/migrations/`)
+3. RLS is defined in the schema; ensure auth is configured
 
 ### 4. Development
 ```bash
