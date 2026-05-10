@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sensei - College Application Management for Counselors & Schools",
+  title: "Admitra - Your College Application System",
   description:
-    "A centralized system that helps counselors manage applications efficiently and helps students submit stronger, more competitive applications.",
+    "Where essays, deadlines, and feedback actually connect. Admitra helps students run a structured college application workflow and invite counselors in context.",
 };
 
 export default function RootLayout({

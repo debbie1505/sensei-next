@@ -1,11 +1,5 @@
-import LandingPage from "@/components/LandingPage"
-import Navbar from "@/components/Navbar";
+import LandingPage from "@/components/LandingPage";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen flex flex-col">
-      <Navbar />
-      <LandingPage/>
-    </main>
-  );
+  return <LandingPage />;
 }

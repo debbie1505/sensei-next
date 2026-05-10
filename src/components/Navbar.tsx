@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import DarkModeToggle from "./DarkModeToggle";
 import { useState, useEffect } from "react";
-import { Menu, X, Sparkles, User as UserIcon, LogOut } from "lucide-react";
+import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { createClient } from "../utils/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { clearMockSession, getMockSession, isMockAuthEnabled } from "@/utils/mock/auth";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -14,6 +16,33 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    if (isMockAuthEnabled()) {
+      const mockSession = getMockSession();
+      if (mockSession) {
+        setUser({
+          id: mockSession.userId,
+          email: mockSession.email,
+        } as User);
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+
+      const onStorage = () => {
+        const nextSession = getMockSession();
+        if (nextSession) {
+          setUser({
+            id: nextSession.userId,
+            email: nextSession.email,
+          } as User);
+        } else {
+          setUser(null);
+        }
+      };
+      window.addEventListener("storage", onStorage);
+      return () => window.removeEventListener("storage", onStorage);
+    }
+
     const supabase = createClient();
     const getUser = async () => {
       const {
@@ -42,6 +71,11 @@ export default function Navbar() {
   }, []);
 
   const handleSignOut = async () => {
+    if (isMockAuthEnabled()) {
+      clearMockSession();
+      setUser(null);
+      return;
+    }
     const supabase = createClient();
     await supabase.auth.signOut();
   };
@@ -50,32 +84,34 @@ export default function Navbar() {
     <nav
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800"
-          : "bg-white dark:bg-background"
+          ? "bg-background/95 backdrop-blur-md shadow-md border-b border-border"
+          : "bg-background border-b border-border/70"
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 bg-gray-900 dark:bg-white rounded-lg flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white dark:text-gray-900" />
-            </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              Sensei
-            </span>
+            <Image
+              src="/admitra-logo2.png"
+              alt="Admitra logo"
+              width={210}
+              height={68}
+              className="h-14 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={() => setOpen(!open)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-accent transition-colors"
             >
               {open ? (
-                <X size={24} className="text-gray-900 dark:text-white" />
+                <X size={24} className="text-foreground" />
               ) : (
-                <Menu size={24} className="text-gray-900 dark:text-white" />
+                <Menu size={24} className="text-foreground" />
               )}
             </button>
           </div>
@@ -88,30 +124,30 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/dashboard"
-                      className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Dashboard
                     </Link>
                     <Link
                       href="/essay"
-                      className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Essays
                     </Link>
                     <Link
                       href="/timeline"
-                      className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Timeline
                     </Link>
-                    <div className="flex items-center gap-2 ml-4 pl-4 border-l border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2 ml-4 pl-4 border-l border-border">
                       <DarkModeToggle />
-                      <div className="w-8 h-8 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center">
-                        <UserIcon className="w-4 h-4 text-white dark:text-gray-900" />
+                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <UserIcon className="w-4 h-4 text-primary-foreground" />
                       </div>
                       <button
                         onClick={handleSignOut}
-                        className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors font-medium flex items-center gap-2"
+                        className="px-3 py-2 text-muted-foreground hover:text-destructive transition-colors font-medium flex items-center gap-2"
                       >
                         <LogOut className="w-4 h-4" />
                       </button>
@@ -121,28 +157,34 @@ export default function Navbar() {
                   <>
                     <Link
                       href="#features"
-                      className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
-                      Features
+                      System
                     </Link>
                     <Link
                       href="#product-preview"
-                      className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
-                      Product
+                      Timeline + Essays
+                    </Link>
+                    <Link
+                      href="/pricing"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
+                    >
+                      Pricing
                     </Link>
                     <Link
                       href="/login"
-                      className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Log In
                     </Link>
                     <DarkModeToggle />
                     <Link
                       href="#cta"
-                      className="ml-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-5 py-2 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-semibold"
+                      className="ml-2 bg-primary text-primary-foreground px-5 py-2 rounded-lg hover:opacity-90 transition-colors font-semibold"
                     >
-                      Get Access
+                      Get Started
                     </Link>
                   </>
                 )}
@@ -153,7 +195,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {open && (
-          <div className="md:hidden mt-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+          <div className="md:hidden mt-4 bg-card rounded-xl border border-border p-4">
             <div className="flex flex-col space-y-2">
               <div className="flex justify-center mb-2">
                 <DarkModeToggle />
@@ -165,31 +207,31 @@ export default function Navbar() {
                       <Link
                         href="/dashboard"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
                         Dashboard
                       </Link>
                       <Link
                         href="/essay"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
                         Essays
                       </Link>
                       <Link
                         href="/timeline"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
                         Timeline
                       </Link>
-                      <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
+                      <div className="border-t border-border pt-2 mt-2">
                         <button
                           onClick={() => {
                             handleSignOut();
                             setOpen(false);
                           }}
-                          className="w-full px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors font-medium flex items-center gap-2"
+                          className="w-full px-4 py-3 text-destructive hover:bg-destructive/10 rounded-lg transition-colors font-medium flex items-center gap-2"
                         >
                           <LogOut className="w-4 h-4" />
                           Sign Out
@@ -201,30 +243,37 @@ export default function Navbar() {
                       <Link
                         href="#features"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
-                        Features
+                        System
                       </Link>
                       <Link
                         href="#product-preview"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
-                        Product
+                        Timeline + Essays
+                      </Link>
+                      <Link
+                        href="/pricing"
+                        onClick={() => setOpen(false)}
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
+                      >
+                        Pricing
                       </Link>
                       <Link
                         href="/login"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
                         Log In
                       </Link>
                       <Link
                         href="#cta"
                         onClick={() => setOpen(false)}
-                        className="mt-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-3 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-semibold text-center"
+                        className="mt-2 bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:opacity-90 transition-colors font-semibold text-center"
                       >
-                        Get Access
+                        Get Started
                       </Link>
                     </>
                   )}

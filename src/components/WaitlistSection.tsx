@@ -4,13 +4,15 @@ import { addToWaitlist } from "@/utils/supabase/waitlist";
 import { ArrowRight, CheckCircle, AlertCircle, Building2, GraduationCap } from "lucide-react";
 
 export default function WaitlistSection() {
-  const [email, setEmail] = useState("");
-  const [userType, setUserType] = useState<"school" | "student" | null>(null);
+  const [schoolEmail, setSchoolEmail] = useState("");
+  const [studentEmail, setStudentEmail] = useState("");
+  const [activeForm, setActiveForm] = useState<"school" | "student" | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, formType: "school" | "student") => {
     e.preventDefault();
+    const email = formType === "school" ? schoolEmail : studentEmail;
     if (!email.trim()) return;
 
     setStatus("loading");
@@ -20,12 +22,16 @@ export default function WaitlistSection() {
     if (result.success) {
       setStatus("success");
       setMessage(
-        userType === "school"
-          ? "We'll be in touch about piloting Sensei at your school."
-          : "You're on the list. We'll notify you when Sensei launches."
+        formType === "school"
+          ? "We'll be in touch about piloting Admitra at your school."
+          : "You're on the list. We'll notify you when Admitra launches."
       );
-      setEmail("");
-      setUserType(null);
+      if (formType === "school") {
+        setSchoolEmail("");
+      } else {
+        setStudentEmail("");
+      }
+      setActiveForm(null);
     } else {
       setStatus("error");
       if (result.error?.includes("duplicate")) {
@@ -39,41 +45,87 @@ export default function WaitlistSection() {
   };
 
   return (
-    <section id="cta" className="py-20 px-6 bg-white dark:bg-background">
+    <section id="cta" className="py-20 px-6 bg-background">
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8">
-          {/* For Schools & Counselors */}
-          <div className="bg-gray-900 dark:bg-white rounded-2xl p-8 text-white dark:text-gray-900">
-            <div className="w-12 h-12 bg-white dark:bg-gray-900 rounded-xl flex items-center justify-center mb-6">
-              <Building2 className="w-6 h-6 text-gray-900 dark:text-white" />
+          {/* For Students */}
+          <div className="bg-primary rounded-2xl p-8 text-primary-foreground">
+            <div className="w-12 h-12 bg-primary-foreground/15 rounded-xl flex items-center justify-center mb-6">
+              <GraduationCap className="w-6 h-6 text-primary-foreground" />
             </div>
-            <h3 className="text-2xl font-bold mb-3">For Schools & Counselors</h3>
-            <p className="text-gray-300 dark:text-gray-600 mb-6">
-              Bring Sensei to your school. We work directly with counseling offices to pilot the platform.
+            <h3 className="text-2xl font-bold mb-3">For Students</h3>
+            <p className="text-primary-foreground/80 mb-6">
+              Start your application system and keep every essay, deadline, and feedback thread connected.
             </p>
-            {!userType || userType === "school" ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
+            {!activeForm || activeForm === "student" ? (
+              <form onSubmit={(e) => handleSubmit(e, "student")} className="space-y-4">
                 <input
                   type="email"
                   required
-                  value={userType === "school" ? email : ""}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setUserType("school");
-                  }}
-                  onFocus={() => setUserType("school")}
-                  placeholder="Work email"
-                  className="w-full px-4 py-3 bg-white dark:bg-gray-100 text-gray-900 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  value={studentEmail}
+                  onChange={(e) => setStudentEmail(e.target.value)}
+                  onFocus={() => setActiveForm("student")}
+                  placeholder="Your email"
+                  className="w-full px-4 py-3 bg-background text-foreground rounded-lg placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   disabled={status === "loading"}
                 />
                 <button
                   type="submit"
-                  disabled={status === "loading" || !email.trim() || userType !== "school"}
-                  className="w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                  disabled={status === "loading" || !studentEmail.trim()}
+                  className="w-full bg-primary-foreground text-primary px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  {status === "loading" && userType === "school" ? (
+                  {status === "loading" && activeForm === "student" ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-gray-900 dark:border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      Joining...
+                    </>
+                  ) : (
+                    <>
+                      Get started
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </form>
+            ) : (
+              <button
+                onClick={() => setActiveForm("student")}
+                className="w-full bg-primary-foreground/20 text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary-foreground/30 transition-colors"
+              >
+                Get started
+              </button>
+            )}
+          </div>
+
+          {/* For Schools & Counselors */}
+          <div className="bg-card rounded-2xl p-8 border border-border">
+            <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mb-6">
+              <Building2 className="w-6 h-6 text-foreground" />
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-3">For Schools & Counselors</h3>
+                <p className="text-muted-foreground mb-6">
+              Bring this structured system to your counseling office. Pilot Admitra with students.
+            </p>
+            {!activeForm || activeForm === "school" ? (
+              <form onSubmit={(e) => handleSubmit(e, "school")} className="space-y-4">
+                <input
+                  type="email"
+                  required
+                  value={schoolEmail}
+                  onChange={(e) => setSchoolEmail(e.target.value)}
+                  onFocus={() => setActiveForm("school")}
+                  placeholder="Work email"
+                  className="w-full px-4 py-3 bg-background text-foreground border border-border rounded-lg placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  disabled={status === "loading"}
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading" || !schoolEmail.trim()}
+                  className="w-full bg-secondary text-secondary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {status === "loading" && activeForm === "school" ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
                       Submitting...
                     </>
                   ) : (
@@ -86,62 +138,10 @@ export default function WaitlistSection() {
               </form>
             ) : (
               <button
-                onClick={() => setUserType("school")}
-                className="w-full bg-white/10 text-white dark:bg-gray-900/10 dark:text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-white/20 dark:hover:bg-gray-900/20 transition-colors"
+                onClick={() => setActiveForm("school")}
+                className="w-full bg-secondary text-secondary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 Request a pilot
-              </button>
-            )}
-          </div>
-
-          {/* For Students */}
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-800">
-            <div className="w-12 h-12 bg-gray-900 dark:bg-white rounded-xl flex items-center justify-center mb-6">
-              <GraduationCap className="w-6 h-6 text-white dark:text-gray-900" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">For Students</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Get access when Sensei launches. We'll notify you when your school or your region is live.
-            </p>
-            {!userType || userType === "student" ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="email"
-                  required
-                  value={userType === "student" ? email : ""}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setUserType("student");
-                  }}
-                  onFocus={() => setUserType("student")}
-                  placeholder="Your email"
-                  className="w-full px-4 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  disabled={status === "loading"}
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading" || !email.trim() || userType !== "student"}
-                  className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {status === "loading" && userType === "student" ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white dark:border-gray-900 border-t-transparent rounded-full animate-spin" />
-                      Joining...
-                    </>
-                  ) : (
-                    <>
-                      Join the waitlist
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </form>
-            ) : (
-              <button
-                onClick={() => setUserType("student")}
-                className="w-full bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
-              >
-                Join the waitlist
               </button>
             )}
           </div>
@@ -166,8 +166,8 @@ export default function WaitlistSection() {
         )}
 
         {/* Privacy Note */}
-        <p className="text-center text-gray-500 dark:text-gray-400 text-sm mt-8">
-          We only use your email to contact you about Sensei. No spam. No resale.
+        <p className="text-center text-muted-foreground text-sm mt-8">
+          We only use your email to contact you about Admitra. No spam. No resale.
         </p>
       </div>
     </section>

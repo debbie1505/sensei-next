@@ -9,9 +9,9 @@ const views: Record<ViewType, { title: string; icon: React.ReactNode; bullets: s
     title: "Counselor View",
     icon: <Users className="w-5 h-5" />,
     bullets: [
-      "Monitor all students at a glance.",
-      "Track deadlines and submissions.",
-      "Identify who needs attention early.",
+      "Review student progress without hunting through docs.",
+      "Comment on drafts tied to prompt and due date.",
+      "Guide students inside one shared application system.",
     ],
     screenshot: (
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-2xl">
@@ -42,9 +42,9 @@ const views: Record<ViewType, { title: string; icon: React.ReactNode; bullets: s
           </div>
           <div className="space-y-3">
             {[
-              { name: "Sarah M.", status: "Essay due in 3 days", color: "yellow" },
-              { name: "James T.", status: "Waiting on 2 recommendations", color: "red" },
-              { name: "Emily R.", status: "All applications submitted", color: "green" },
+              { name: "Sarah M.", status: "Essay due in 3 days", colorClass: "bg-yellow-500" },
+              { name: "James T.", status: "Waiting on 2 recommendations", colorClass: "bg-red-500" },
+              { name: "Emily R.", status: "All applications submitted", colorClass: "bg-green-500" },
             ].map((student, i) => (
               <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600" />
@@ -52,7 +52,7 @@ const views: Record<ViewType, { title: string; icon: React.ReactNode; bullets: s
                   <div className="text-sm font-medium text-gray-900 dark:text-white">{student.name}</div>
                   <div className="text-xs text-gray-500">{student.status}</div>
                 </div>
-                <div className={`w-2 h-2 rounded-full bg-${student.color}-500`} />
+                <div className={`w-2 h-2 rounded-full ${student.colorClass}`} />
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             ))}
@@ -62,12 +62,12 @@ const views: Record<ViewType, { title: string; icon: React.ReactNode; bullets: s
     ),
   },
   student: {
-    title: "Student View",
+    title: "Student System View",
     icon: <GraduationCap className="w-5 h-5" />,
     bullets: [
-      "One workspace for all applications.",
-      "AI-assisted essay feedback.",
-      "Deadlines and tasks that adapt to your schools.",
+      "Add schools, prompts, and deadlines once.",
+      "Write drafts in context, not isolated documents.",
+      "See exactly what is on track and what is slipping.",
     ],
     screenshot: (
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-2xl">
@@ -114,9 +114,9 @@ const views: Record<ViewType, { title: string; icon: React.ReactNode; bullets: s
     title: "Teacher View",
     icon: <BookOpen className="w-5 h-5" />,
     bullets: [
-      "See all recommendation requests.",
-      "Review assigned essays.",
-      "Clear commitments, no email chains.",
+      "Jump to the exact draft and prompt that needs input.",
+      "Give actionable feedback in the right context.",
+      "Avoid back-and-forth email chains and missing files.",
     ],
     screenshot: (
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-2xl">
@@ -164,30 +164,30 @@ const views: Record<ViewType, { title: string; icon: React.ReactNode; bullets: s
 };
 
 export default function ProductPreview() {
-  const [activeView, setActiveView] = useState<ViewType>("counselor");
+  const [activeView, setActiveView] = useState<ViewType>("student");
 
   return (
-    <section id="product-preview" className="py-20 px-6 bg-gray-50 dark:bg-gray-900">
+    <section id="product-preview" className="py-24 px-6 bg-gradient-to-b from-secondary/40 via-background to-secondary/40 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-4">
-          See the product
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
+          See how the system works
         </h2>
-        <p className="text-gray-600 dark:text-gray-400 text-center mb-12 text-lg">
-          Three views. One system.
+        <p className="text-muted-foreground text-center mb-12 text-lg">
+          Start with student workflow. Layer collaboration after.
         </p>
 
         {/* Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-white dark:bg-gray-800 rounded-xl p-1.5 border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="flex justify-center mb-16">
+          <div className="inline-flex bg-card rounded-2xl p-2 border border-border shadow-lg">
             {(Object.keys(views) as ViewType[]).map((key) => (
               <button
                 key={key}
                 id={`${key}-view`}
                 onClick={() => setActiveView(key)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
                   activeView === key
-                    ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    ? "bg-primary text-primary-foreground shadow-lg transform scale-105"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
                 }`}
               >
                 {views[key].icon}
@@ -198,24 +198,49 @@ export default function ProductPreview() {
         </div>
 
         {/* Content */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Screenshot */}
-          <div className="order-2 lg:order-1">
-            {views[activeView].screenshot}
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Screenshot with 3D effect */}
+          <div className="order-2 lg:order-1 relative">
+            {/* Background glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-50 -z-10 transform scale-110" />
+            
+            {/* Main screenshot with perspective */}
+            <div 
+              className="transform transition-all duration-500 hover:scale-[1.02]"
+              style={{
+                perspective: "1000px",
+              }}
+            >
+              <div 
+                className="transform transition-transform duration-500 hover:rotate-y-2"
+                style={{
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                {views[activeView].screenshot}
+              </div>
+            </div>
+
+            {/* Floating decorative elements */}
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-2xl animate-pulse" />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-green-400 to-teal-500 rounded-full opacity-20 blur-2xl animate-pulse" style={{ animationDelay: "1s" }} />
           </div>
 
           {/* Bullets */}
           <div className="order-1 lg:order-2">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            <h3 className="text-2xl font-bold text-foreground mb-8">
               {views[activeView].title}
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-6">
               {views[activeView].bullets.map((bullet, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white dark:text-gray-900 text-sm font-bold">{index + 1}</span>
+                <li 
+                  key={index} 
+                  className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-primary-foreground text-sm font-bold">{index + 1}</span>
                   </div>
-                  <p className="text-lg text-gray-700 dark:text-gray-300">{bullet}</p>
+                  <p className="text-lg text-muted-foreground pt-1">{bullet}</p>
                 </li>
               ))}
             </ul>
