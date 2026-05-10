@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import DarkModeToggle from "./DarkModeToggle"
+import Image from "next/image";
+import DarkModeToggle from "./DarkModeToggle";
 import { useState, useEffect } from "react";
-import { Menu, X, Sparkles, User as UserIcon, LogOut } from "lucide-react";
+import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { createClient } from "../utils/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { clearMockSession, getMockSession, isMockAuthEnabled } from "@/utils/mock/auth";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -14,104 +16,140 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    if (isMockAuthEnabled()) {
+      const mockSession = getMockSession();
+      if (mockSession) {
+        setUser({
+          id: mockSession.userId,
+          email: mockSession.email,
+        } as User);
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+
+      const onStorage = () => {
+        const nextSession = getMockSession();
+        if (nextSession) {
+          setUser({
+            id: nextSession.userId,
+            email: nextSession.email,
+          } as User);
+        } else {
+          setUser(null);
+        }
+      };
+      window.addEventListener("storage", onStorage);
+      return () => window.removeEventListener("storage", onStorage);
+    }
+
     const supabase = createClient();
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
       setLoading(false);
     };
     getUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
-    // Handle scroll effect
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       subscription.unsubscribe();
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   const handleSignOut = async () => {
+    if (isMockAuthEnabled()) {
+      clearMockSession();
+      setUser(null);
+      return;
+    }
     const supabase = createClient();
     await supabase.auth.signOut();
   };
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-card/90 backdrop-blur-md shadow-lg border-b border-border/50' 
-        : 'bg-card/80 backdrop-blur-sm'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6 py-4">
+    <nav
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-background/95 backdrop-blur-md shadow-md border-b border-border"
+          : "bg-background border-b border-border/70"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          {/* Enhanced Logo */}
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
-              Sensei
-            </span>
+            <Image
+              src="/admitra-logo2.png"
+              alt="Admitra logo"
+              width={210}
+              height={68}
+              className="h-14 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button 
+            <button
               onClick={() => setOpen(!open)}
-              className="p-2 rounded-xl bg-muted hover:bg-muted/80 transition-all duration-300 hover:scale-105"
+              className="p-2 rounded-lg hover:bg-accent transition-colors"
             >
-              {open ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
+              {open ? (
+                <X size={24} className="text-foreground" />
+              ) : (
+                <Menu size={24} className="text-foreground" />
+              )}
             </button>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-1 items-center">
-            <DarkModeToggle />
+          <div className="hidden md:flex items-center gap-1">
             {!loading && (
               <>
                 {user ? (
                   <>
-                    <Link 
-                      href="/dashboard" 
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                    <Link
+                      href="/dashboard"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Dashboard
                     </Link>
-                    <Link 
-                      href="/essay" 
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                    <Link
+                      href="/essay"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
-                      Essay Review
+                      Essays
                     </Link>
-                    <Link 
-                      href="/timeline" 
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                    <Link
+                      href="/timeline"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Timeline
                     </Link>
-                    <Link 
-                      href="/scholarships" 
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
-                    >
-                      Scholarships
-                    </Link>
                     <div className="flex items-center gap-2 ml-4 pl-4 border-l border-border">
-                      <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
-                        <UserIcon className="w-4 h-4 text-white" />
+                      <DarkModeToggle />
+                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <UserIcon className="w-4 h-4 text-primary-foreground" />
                       </div>
                       <button
                         onClick={handleSignOut}
-                        className="px-4 py-2 rounded-xl text-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-300 font-medium flex items-center gap-2"
+                        className="px-3 py-2 text-muted-foreground hover:text-destructive transition-colors font-medium flex items-center gap-2"
                       >
                         <LogOut className="w-4 h-4" />
-                        Sign Out
                       </button>
                     </div>
                   </>
@@ -119,21 +157,34 @@ export default function Navbar() {
                   <>
                     <Link
                       href="#features"
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
-                      Features
+                      System
+                    </Link>
+                    <Link
+                      href="#product-preview"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
+                    >
+                      Timeline + Essays
+                    </Link>
+                    <Link
+                      href="/pricing"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
+                    >
+                      Pricing
                     </Link>
                     <Link
                       href="/login"
-                      className="px-4 py-2 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                      className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
                     >
                       Log In
                     </Link>
+                    <DarkModeToggle />
                     <Link
-                      href="#waitlist"
-                      className="ml-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-2 rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg font-semibold"
+                      href="#cta"
+                      className="ml-2 bg-primary text-primary-foreground px-5 py-2 rounded-lg hover:opacity-90 transition-colors font-semibold"
                     >
-                      Join Waitlist
+                      Get Started
                     </Link>
                   </>
                 )}
@@ -142,64 +193,45 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Enhanced Mobile Menu */}
+        {/* Mobile Menu */}
         {open && (
-          <div className="md:hidden mt-6 bg-card/95 backdrop-blur-md rounded-2xl border border-border/50 shadow-xl p-6">
-            <div className="flex flex-col space-y-4">
-              <div className="flex justify-center mb-4">
+          <div className="md:hidden mt-4 bg-card rounded-xl border border-border p-4">
+            <div className="flex flex-col space-y-2">
+              <div className="flex justify-center mb-2">
                 <DarkModeToggle />
               </div>
               {!loading && (
                 <>
                   {user ? (
                     <>
-                      <Link 
-                        href="/dashboard" 
+                      <Link
+                        href="/dashboard"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium flex items-center gap-3"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
-                        <div className="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">D</span>
-                        </div>
                         Dashboard
                       </Link>
-                      <Link 
-                        href="/essay" 
+                      <Link
+                        href="/essay"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium flex items-center gap-3"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
-                        <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">E</span>
-                        </div>
-                        Essay Review
+                        Essays
                       </Link>
-                      <Link 
-                        href="/timeline" 
+                      <Link
+                        href="/timeline"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium flex items-center gap-3"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
-                        <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">T</span>
-                        </div>
                         Timeline
                       </Link>
-                      <Link 
-                        href="/scholarships" 
-                        onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium flex items-center gap-3"
-                      >
-                        <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">S</span>
-                        </div>
-                        Scholarships
-                      </Link>
-                      <div className="border-t border-border pt-4 mt-4">
+                      <div className="border-t border-border pt-2 mt-2">
                         <button
                           onClick={() => {
                             handleSignOut();
                             setOpen(false);
                           }}
-                          className="w-full px-4 py-3 rounded-xl text-destructive hover:text-destructive hover:bg-destructive/10 transition-all duration-300 font-medium flex items-center gap-3"
+                          className="w-full px-4 py-3 text-destructive hover:bg-destructive/10 rounded-lg transition-colors font-medium flex items-center gap-2"
                         >
                           <LogOut className="w-4 h-4" />
                           Sign Out
@@ -211,23 +243,37 @@ export default function Navbar() {
                       <Link
                         href="#features"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
-                        Features
+                        System
+                      </Link>
+                      <Link
+                        href="#product-preview"
+                        onClick={() => setOpen(false)}
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
+                      >
+                        Timeline + Essays
+                      </Link>
+                      <Link
+                        href="/pricing"
+                        onClick={() => setOpen(false)}
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
+                      >
+                        Pricing
                       </Link>
                       <Link
                         href="/login"
                         onClick={() => setOpen(false)}
-                        className="px-4 py-3 rounded-xl text-foreground hover:text-primary hover:bg-accent transition-all duration-300 font-medium"
+                        className="px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors font-medium"
                       >
                         Log In
                       </Link>
                       <Link
-                        href="#waitlist"
+                        href="#cta"
                         onClick={() => setOpen(false)}
-                        className="mt-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-3 rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-300 font-semibold text-center block"
+                        className="mt-2 bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:opacity-90 transition-colors font-semibold text-center"
                       >
-                        Join Waitlist
+                        Get Started
                       </Link>
                     </>
                   )}

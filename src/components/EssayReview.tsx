@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import Link from "next/link";
-import { ArrowLeft, FileText, CheckCircle, AlertCircle, Star, Edit3, RotateCcw } from "lucide-react";
+import { ArrowLeft, FileText, AlertCircle, Star, Edit3, RotateCcw } from "lucide-react";
 import { EssayMode } from "@/llm/provider";
 import { type EssayReview } from "@/llm/schemas";
+import { isMockAuthEnabled } from "@/utils/mock/auth";
+import MockEssayWorkspace from "./mock/MockEssayWorkspace";
 
 export default function EssayReview() {
   const [essay, setEssay] = useState("");
@@ -14,6 +16,10 @@ export default function EssayReview() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showRevised, setShowRevised] = useState(false);
+
+  if (isMockAuthEnabled()) {
+    return <MockEssayWorkspace />;
+  }
 
   const handleReview = async () => {
     setLoading(true);

@@ -82,7 +82,7 @@ export const TimelineTaskSchema = {
       source: {
         type: "object",
         properties: {
-          origin: { type: "string", enum: ["sensei", "user", "import", "school"] },
+          origin: { type: "string", enum: ["admitra", "user", "import", "school"] },
           rationale: { type: "string" }
         },
         required: ["origin"],
@@ -189,7 +189,7 @@ export interface TimelineTask {
     status?: "todo" | "doing" | "blocked" | "done";
   }[];
   source: {
-    origin: "sensei" | "user" | "import" | "school";
+    origin: "admitra" | "user" | "import" | "school";
     rationale?: string;
   };
 }

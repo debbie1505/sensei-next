@@ -14,6 +14,8 @@ import {
   Download
 } from 'lucide-react';
 import { type Profile } from '@/llm/schemas';
+import { isMockAuthEnabled } from '@/utils/mock/auth';
+import MockTimelineWorkspace from './mock/MockTimelineWorkspace';
 
 interface Task {
   id: string;
@@ -36,7 +38,7 @@ interface Task {
     status?: 'todo' | 'doing' | 'blocked' | 'done';
   }[];
   source: {
-    origin: 'sensei' | 'user' | 'import' | 'school';
+    origin: 'admitra' | 'user' | 'import' | 'school';
     rationale?: string;
   };
 }
@@ -50,7 +52,7 @@ interface Plan {
   tasks: Task[];
 }
 
-export default function Timeline() {
+function RealTimeline() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -419,4 +421,11 @@ export default function Timeline() {
       </div>
     </div>
   );
+}
+
+export default function Timeline() {
+  if (isMockAuthEnabled()) {
+    return <MockTimelineWorkspace />;
+  }
+  return <RealTimeline />;
 }

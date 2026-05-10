@@ -1,6 +1,6 @@
-# Sensei - College Application Management for Counselors & Schools
+# Admitra - College Application Management for Counselors & Schools
 
-A centralized platform that helps counselors manage applications at scale and helps students submit stronger, more competitive applications. B2B2C: schools license Sensei; counselors oversee students; students use one workspace for applications, essays, and timelines.
+A centralized platform that helps counselors manage applications at scale and helps students submit stronger, more competitive applications. B2B2C: schools license Admitra; counselors oversee students; students use one workspace for applications, essays, and timelines.
 
 ## Features
 
@@ -72,7 +72,7 @@ src/
 ### 1. Clone and Install
 ```bash
 git clone <repository-url>
-cd sensei-next
+cd admitra
 npm install
 ```
 
@@ -82,12 +82,16 @@ Create a `.env.local` file:
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
 # OpenAI Configuration
-NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
+OPENAI_API_KEY=your_openai_api_key
 
 # Site URL
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Cron job authentication (generate a random string)
+CRON_SECRET=your_cron_secret
 ```
 
 ### 3. Database Setup
@@ -130,6 +134,14 @@ Track these metrics for success:
 - **Railway**: Good for full-stack apps
 - **AWS/GCP**: For enterprise deployments
 
+### Cron Jobs
+Alert generation runs daily at 8 AM UTC via Vercel Cron. Configuration is in `vercel.json`.
+
+To test locally:
+```bash
+curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/alerts
+```
+
 ## Roadmap
 
 ### Current
@@ -137,9 +149,9 @@ Track these metrics for success:
 - Role-based onboarding (student, counselor, teacher/recommender)
 - Essay review, timeline, and scholarship matching for students
 - Schools and alerts schema; RLS for multi-tenant readiness
+- Alert generation (missed deadlines, low engagement, weak essays)
 
 ### Next
-- Alert generation (missed deadlines, low engagement, weak essays)
 - Counselor notes and essay feedback workflow
 - Key person essay/LOR views and commenting
 - School admin and invite flows
@@ -158,7 +170,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support or to pilot Sensei at your school, email **hello@usesensei.app** or open an issue in this repository.
+For support or to pilot Admitra at your school, email **hello@admitra.com** or open an issue in this repository.
 
 ---
 

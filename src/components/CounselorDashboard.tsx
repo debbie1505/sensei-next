@@ -115,7 +115,7 @@ export default function CounselorDashboard() {
               <div className="px-6 py-16 text-center text-muted-foreground">
                 <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No students in your caseload yet.</p>
-                <p className="text-sm mt-1">Students from your school will appear here once they join Sensei.</p>
+                <p className="text-sm mt-1">Students from your school will appear here once they join Admitra.</p>
               </div>
             ) : (
               students.map((s) => (

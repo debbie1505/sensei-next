@@ -42,7 +42,7 @@ export const TimelineTaskSchema = z.object({
     status: z.enum(['todo', 'doing', 'blocked', 'done']).default('todo'),
   })).max(10).optional(),
   source: z.object({
-    origin: z.enum(['sensei', 'user', 'import', 'school']),
+    origin: z.enum(['admitra', 'user', 'import', 'school']),
     rationale: z.string().optional(),
   }),
 });

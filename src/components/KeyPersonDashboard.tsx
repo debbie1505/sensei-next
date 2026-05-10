@@ -48,9 +48,9 @@ export default function KeyPersonDashboard() {
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-foreground">Assigned students</h1>
+          <h1 className="text-3xl font-bold text-foreground">Students you support</h1>
           <p className="text-muted-foreground mt-1">
-            Students you’re supporting as essay reviewer or LOR writer
+            Students who have added you as a supporter for essays or recommendations
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export default function KeyPersonDashboard() {
         </div>
 
         <p className="mt-8 text-sm text-muted-foreground">
-          You only see students who have added you. You can view their essays (essay reviewer) or LOR materials (LOR writer) from their detail page.
+          You only see students who have added you as a supporter. Access their essays or recommendation materials from their detail page.
         </p>
       </div>
     </div>

@@ -1,65 +1,59 @@
 "use client";
 import Link from "next/link";
-import { Heart, Mail, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <Link href="/" className="text-3xl font-bold text-teal-400">
-                Sensei
+    <footer className="bg-card text-foreground border-t border-border">
+      <div className="max-w-6xl mx-auto px-6 py-16">
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
+          {/* Brand */}
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <Link href="/" className="inline-flex items-center">
+                <Image
+                  src="/admitra-logo2.png"
+                  alt="Admitra logo"
+                  width={250}
+                  height={80}
+                  className="h-16 w-auto object-contain"
+                />
               </Link>
             </div>
-            <p className="text-gray-300 mb-8 max-w-md text-lg leading-relaxed">
-              College application management for counselors and schools. One system to manage applications at scale and help students submit stronger applications.
+            <p className="text-muted-foreground max-w-md mb-6">
+              Your college application system — where essays, deadlines, and feedback actually connect.
             </p>
-            <div className="flex space-x-4">
-              <a
-                href="mailto:hello@usesensei.app"
-                className="text-gray-400 hover:text-teal-400 transition-all duration-300 transform hover:scale-110 bg-gray-800/50 p-3 rounded-xl hover:bg-gray-700/50"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-            </div>
+            <a
+              href="mailto:hello@admitra.com"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              hello@admitra.com
+            </a>
           </div>
 
-          {/* Enhanced Links */}
+          {/* Links */}
           <div>
-            <h3 className="text-xl font-semibold mb-6 text-white">Links</h3>
-            <ul className="space-y-4">
+            <h4 className="font-semibold mb-4">Links</h4>
+            <ul className="space-y-3 text-muted-foreground">
               <li>
-                <Link 
-                  href="#features" 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
-                >
-                  Features
+                <Link href="#features" className="hover:text-foreground transition-colors">
+                  System
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="#waitlist" 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
-                >
-                  Join Waitlist
+                <Link href="#product-preview" className="hover:text-foreground transition-colors">
+                  Workflow
                 </Link>
               </li>
               <li>
-                <a 
-                  href="mailto:hello@usesensei.app" 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
-                >
+                <Link href="#cta" className="hover:text-foreground transition-colors">
+                  Get Started
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:hello@admitra.com" className="hover:text-foreground transition-colors">
                   Contact
                 </a>
               </li>
@@ -67,35 +61,26 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Enhanced Bottom */}
-        <div className="border-t border-gray-800 mt-16 pt-12 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Sensei. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <a 
-              href="#" 
-              className="text-gray-400 hover:text-white text-sm transition-all duration-300 hover:underline"
-            >
-              Privacy
-            </a>
-            <a 
-              href="#" 
-              className="text-gray-400 hover:text-white text-sm transition-all duration-300 hover:underline"
-            >
-              Terms
-            </a>
-            <span className="text-gray-400 text-sm flex items-center gap-2">
-              Made with <Heart className="w-4 h-4 text-red-500 animate-pulse" /> for counselors and students
-            </span>
+        {/* Divider */}
+        <div className="border-t border-border pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-muted-foreground text-sm">
+              &copy; {new Date().getFullYear()} Admitra. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <a href="#" className="hover:text-foreground transition-colors">
+                Privacy
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Terms
+              </a>
+            </div>
           </div>
-        </div>
 
-        {/* Enhanced Compliance */}
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="bg-gray-800/50 rounded-2xl p-6 text-center backdrop-blur-sm border border-gray-700/50">
-            <p className="text-gray-300 text-sm font-medium">
-              13+ only. Sensei is guidance, not legal/financial advice.
+          {/* Privacy / FERPA Note */}
+          <div className="mt-8 p-4 bg-secondary rounded-xl text-center">
+            <p className="text-muted-foreground text-sm">
+              Built student-first. Invite counselors and teachers into the same context when you are ready.
             </p>
           </div>
         </div>
