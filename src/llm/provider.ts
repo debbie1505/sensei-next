@@ -59,7 +59,7 @@ Scheduling rules:
 - Financial aid: FAFSA/CSS tasks with early internal deadlines; include parent info collection.
 - Safety/target/reach balance: reflect school list breadth in tasks.
 
-Set source.origin = "sensei" and fill a short source.rationale.`;
+Set source.origin = "admitra" and fill a short source.rationale.`;
 
 // Scholarship Matching System Prompt
 const SCHOLARSHIP_SYSTEM_PROMPT = `You are a scholarship matching expert.

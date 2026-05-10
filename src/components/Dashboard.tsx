@@ -15,6 +15,10 @@ import {
 } from "lucide-react";
 import CounselorDashboard from "./CounselorDashboard";
 import KeyPersonDashboard from "./KeyPersonDashboard";
+import { getMockSession, isMockAuthEnabled } from "@/utils/mock/auth";
+import MockStudentDashboard from "./mock/MockStudentDashboard";
+import MockCounselorDashboard from "./mock/MockCounselorDashboard";
+import MockTeacherDashboard from "./mock/MockTeacherDashboard";
 
 type TimelineItem = {
   id: string;
@@ -76,16 +80,17 @@ function logPgErr(prefix: string, err: unknown) {
 }
 
 
-export default function Dashboard() {
+function RealDashboard() {
   const [submissions, setSubmissions] = useState<EssaySubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [profileNotFound, setProfileNotFound] = useState(false);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [timelineId, setTimelineId] = useState<string | null>(null);
 
   function downloadTimeline(format: "json" | "text") {
-    const filename = `sensei-timeline.${format === "json" ? "json" : "txt"}`;
+    const filename = `admitra-timeline.${format === "json" ? "json" : "txt"}`;
     let content = "";
 
     if (format === "json") {
@@ -134,7 +139,7 @@ export default function Dashboard() {
           .order("created_at", { ascending: false })
           .maybeSingle();
     
-        if (planErr) {
+        if (planErr && planErr.message) {
           logPgErr("Plan select failed", planErr);
           return;
         }
@@ -199,7 +204,12 @@ export default function Dashboard() {
           .single();
     
         if (error) {
-          logPgErr("Load profile failed", error);
+          // PGRST116 = no rows returned - user needs to complete onboarding
+          if (error.code === "PGRST116") {
+            setProfileNotFound(true);
+          } else {
+            logPgErr("Load profile failed", error);
+          }
           setUserData(null);
         } else {
           setUserData(data);
@@ -248,7 +258,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back 👋</h1>
-          <p className="text-gray-600">Here&apos;s your college application progress</p>
+          <p className="text-gray-600">Here is your application system snapshot</p>
         </div>
 
         {/* Quick Actions */}
@@ -259,9 +269,9 @@ export default function Dashboard() {
           >
             <div className="flex items-center mb-3">
               <FileText className="w-6 h-6 text-blue-600 mr-3" />
-              <h3 className="font-semibold text-gray-900">Essay Review</h3>
+              <h3 className="font-semibold text-gray-900">Essays in context</h3>
             </div>
-            <p className="text-gray-600 text-sm">Get AI feedback on your college essays</p>
+            <p className="text-gray-600 text-sm">Draft and refine essays tied to schools and prompts</p>
           </Link>
 
           <Link 
@@ -270,9 +280,9 @@ export default function Dashboard() {
           >
             <div className="flex items-center mb-3">
               <Calendar className="w-6 h-6 text-green-600 mr-3" />
-              <h3 className="font-semibold text-gray-900">Timeline</h3>
+              <h3 className="font-semibold text-gray-900">Structured timeline</h3>
             </div>
-            <p className="text-gray-600 text-sm">Generate your application timeline</p>
+            <p className="text-gray-600 text-sm">Keep deadlines and tasks mapped to your application plan</p>
           </Link>
 
           <Link 
@@ -281,7 +291,7 @@ export default function Dashboard() {
           >
             <div className="flex items-center mb-3">
               <DollarSign className="w-6 h-6 text-yellow-600 mr-3" />
-              <h3 className="font-semibold text-gray-900">Scholarships</h3>
+              <h3 className="font-semibold text-gray-900">Opportunity matching</h3>
             </div>
             <p className="text-gray-600 text-sm">Find matching scholarships</p>
           </Link>
@@ -289,13 +299,27 @@ export default function Dashboard() {
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center mb-3">
               <User className="w-6 h-6 text-purple-600 mr-3" />
-              <h3 className="font-semibold text-gray-900">Profile</h3>
+              <h3 className="font-semibold text-gray-900">System profile</h3>
             </div>
-            <p className="text-gray-600 text-sm">Manage your application profile</p>
+            <p className="text-gray-600 text-sm">Set context for schools, goals, and application strategy</p>
           </div>
         </div>
 
-        {!userData ? (
+        {profileNotFound ? (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="text-center py-8">
+              <User className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">Complete Your Profile</h2>
+              <p className="text-gray-600 mb-6">Set up your profile to get personalized recommendations and start tracking your applications.</p>
+              <Link 
+                href="/onboarding" 
+                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Get Started
+              </Link>
+            </div>
+          </div>
+        ) : !userData ? (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
@@ -308,7 +332,7 @@ export default function Dashboard() {
             <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
               <div className="flex items-center mb-4">
                 <User className="w-6 h-6 text-blue-600 mr-3" />
-                <h2 className="text-xl font-semibold text-gray-900">Your Profile Summary</h2>
+                <h2 className="text-xl font-semibold text-gray-900">System summary</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -339,14 +363,14 @@ export default function Dashboard() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <FileText className="w-6 h-6 text-blue-600 mr-3" />
-                  <h2 className="text-xl font-semibold text-gray-900">Essay Submissions</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">Essay workflow</h2>
                 </div>
                 <Link 
                   href="/essay"
                   className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-1" />
-                  New Review
+                  New Draft
                 </Link>
               </div>
               
@@ -358,13 +382,13 @@ export default function Dashboard() {
               ) : submissions.length === 0 ? (
                 <div className="text-center py-8">
                   <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-500 mb-3">No essays submitted yet</p>
+                  <p className="text-gray-500 mb-3">No drafts in your system yet</p>
                   <Link 
                     href="/essay"
                     className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Submit Your First Essay
+                    Start Your First Draft
                   </Link>
                 </div>
               ) : (
@@ -400,7 +424,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <Calendar className="w-6 h-6 text-green-600 mr-3" />
-                  <h2 className="text-xl font-semibold text-gray-900">Application Timeline</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">Application timeline</h2>
                 </div>
                 {timeline.length > 0 && (
                   <div className="flex space-x-2">
@@ -418,13 +442,13 @@ export default function Dashboard() {
               {timeline.length === 0 ? (
                 <div className="text-center py-8">
                   <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-500 mb-3">No timeline generated yet</p>
+                  <p className="text-gray-500 mb-3">No structured timeline yet</p>
                   <Link 
                     href="/timeline"
                     className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Generate Timeline
+                    Build Timeline
                   </Link>
                 </div>
               ) : (
@@ -514,7 +538,7 @@ onClick={async () => {
 
                           >
                             <CheckCircle className="w-4 h-4 mr-2" />
-                            Save Changes
+                            Save Timeline
                           </button>
 
                           <button
@@ -535,4 +559,18 @@ onClick={async () => {
       </div>
     </div>
   );
+}
+
+export default function Dashboard() {
+  if (isMockAuthEnabled()) {
+    const mockSession = getMockSession();
+    if (mockSession?.role === "counselor") {
+      return <MockCounselorDashboard />;
+    }
+    if (mockSession?.role === "key_person") {
+      return <MockTeacherDashboard />;
+    }
+    return <MockStudentDashboard />;
+  }
+  return <RealDashboard />;
 }

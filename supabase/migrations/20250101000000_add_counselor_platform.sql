@@ -1,6 +1,6 @@
 -- Counselor-centered platform: roles, schools, key people, alerts
 
--- Schools (B2B: schools license Sensei)
+-- Schools (B2B: schools license Admitra)
 CREATE TABLE IF NOT EXISTS schools (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,

@@ -12,7 +12,7 @@ const faqs = [
     answer: "Free during beta; student pricing later."
   },
   {
-    question: "Does Sensei write essays?",
+    question: "Does Admitra write essays?",
     answer: "No—coaching only."
   },
   {
@@ -105,7 +105,7 @@ export default function TestimonialsSection() {
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Privacy Policy</a>
               <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Terms</a>
-              <a href="mailto:hello@usesensei.app" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Contact</a>
+              <a href="mailto:hello@admitra.com" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Contact</a>
             </div>
           </div>
         </div>
